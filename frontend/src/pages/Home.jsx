@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import Card from "../components/Card";
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [Response, setResponse] = useState([]);
+
   useEffect(() => {
     const searchMovies = async () => {
       const response = await fetch(
@@ -14,18 +15,33 @@ const Home = () => {
   }, [searchTerm]);
 
   return (
-    <div>
-      <h1>Welcome to the Home Page</h1>
-      <input type="text" onChange={(e) => setSearchTerm(e.target.value)} />
-      {Response.map((movie, index) => (
-        <div key={index}>
-          <h1>{movie.title}</h1>
-          <Link to={movie.navigateLink}>Navigate</Link>
-          <img src={movie.posterPath} alt={movie.title} />
+    <>
+      <div className="w-screen mt-56 flex items-center justify-center">
+        <div className=" flex flex-col items-center justify-center gap-4">
+          <h1 className="text-7xl tracking-tighter ">
+            Welcome to Movie Database
+          </h1>
+          <div className=" w-full   max-w-3xl text-center">
+            <p className=" text-2xl tracking-tight font-serif">
+              A free Frontend Client for watching Movies. Search for your
+              favourite movies and watch them for free.
+            </p>
+          </div>
+          <input
+            type="text"
+            className="input input-primary"
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
-      ))}
-      <Link to="/movies">Navigate to Popular Movies</Link>
-    </div>
+      </div>
+      <div className="flex flex-wrap gap-5 mt-20">
+        {Response.map((movie, index) => (
+          <div key={index}>
+            <Card movie={movie}></Card>
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 

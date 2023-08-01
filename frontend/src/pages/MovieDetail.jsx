@@ -45,7 +45,7 @@ const MovieDetails = () => {
       <p>Status: {status}</p>
       <p>Release Date: {release_date}</p>
       <img src={PosterPath} alt={title} />
-      <iframe src={embedUrl} title="Movie Trailer" />
+      <iframe src={embedUrl} title="Movie Trailer" allowFullScreen />
     </div>
   );
 };

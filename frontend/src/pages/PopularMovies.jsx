@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const MoviesList = () => {
+const PopularMovies = () => {
   const [movies, setMovies] = useState([]);
   const [page, setPage] = useState(1);
 
@@ -12,7 +12,13 @@ const MoviesList = () => {
     async function fetchMovies() {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/movie/allmovies?page=${page}`
+          `http://localhost:3000/api/movie/allmovies`,
+          {
+            params: {
+              page: page,
+              category: "popular",
+            },
+          }
         );
         setMovies(response.data);
       } catch (error) {
@@ -49,4 +55,4 @@ const MoviesList = () => {
   );
 };
 
-export default MoviesList;
+export default PopularMovies;

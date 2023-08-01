@@ -3,9 +3,12 @@ import axios from "axios";
 export const getAllMovies = async (req, res) => {
   try {
     // Make a request to TMDB API to get a list of popular movies
-    const { page } = req.query;
+    const { page, category } = req.query;
     const tmdbApiKey = process.env.TMDB_API_KEY;
-    const tmdbUrl = `https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&page=${page}`;
+    if (!["popular", "top_rated", "upcoming"].includes(category)) {
+      return res.status(400).json({ error: "Invalid category." });
+    }
+    const tmdbUrl = `https://api.themoviedb.org/3/movie/${category}?api_key=${tmdbApiKey}&page=${page}`;
     const tmdbResponse = await axios.get(tmdbUrl);
 
     // Extract relevant movie data from TMDB API response
