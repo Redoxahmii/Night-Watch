@@ -1,8 +1,6 @@
-// MovieList.js
-
 import { useState, useEffect } from "react";
+import Card from "../components/Card";
 import axios from "axios";
-import { Link } from "react-router-dom";
 
 const PopularMovies = () => {
   const [movies, setMovies] = useState([]);
@@ -39,18 +37,19 @@ const PopularMovies = () => {
   };
 
   return (
-    <div>
-      <h1>Popular Movies</h1>
-      <ul>
-        {movies.map((movie) => (
-          <li key={movie.id}>
-            {/* Use Link component to navigate to MovieDetails */}
-            <Link to={`/movies/${movie.id}`}>{movie.title}</Link>
-          </li>
-        ))}
+    <div className=" w-screen items-center justify-center flex flex-col">
+      <h1 className=" text-7xl mt-10">Popular Movies</h1>
+      <div className=" flex gap-5 font-bold text-2xl my-10">
         <button onClick={handleNextPage}>Next Page</button>
         <button onClick={handlePreviousPage}>Previous Page</button>
-      </ul>
+      </div>
+      <div className="flex flex-wrap gap-16 pl-5 w-screen">
+        {movies.map((movie, index) => (
+          <div key={index}>
+            <Card movie={movie}></Card>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

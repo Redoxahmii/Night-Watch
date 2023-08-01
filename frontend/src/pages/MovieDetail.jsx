@@ -38,14 +38,26 @@ const MovieDetails = () => {
   } = movieDetails;
 
   return (
-    <div>
-      <h1>{title}</h1>
-      <p>{tagline}</p>
-      <p>{overview}</p>
-      <p>Status: {status}</p>
-      <p>Release Date: {release_date}</p>
-      <img src={PosterPath} alt={title} />
-      <iframe src={embedUrl} title="Movie Trailer" allowFullScreen />
+    <div className="flex w-screen h-[91vh] gap-48">
+      <div className=" w-[30vw] flex flex-col pl-5 gap-5 mt-20">
+        <img
+          className=" object-contain w-40 h-40"
+          src={PosterPath}
+          alt={title}
+        />
+        <h1 className=" text-4xl">{title}</h1>
+        <p className="text-slate-500">{tagline}</p>
+        <p>{overview}</p>
+        <p>Status: {status}</p>
+        <p>Release Date: {release_date}</p>
+      </div>
+      <div className=" w-[60vw] flex">
+        <iframe
+          src={embedUrl}
+          allowFullScreen
+          className=" w-full aspect-video"
+        ></iframe>
+      </div>
     </div>
   );
 };

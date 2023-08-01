@@ -14,10 +14,7 @@ const Navbar = () => {
             <Link to="/movies/popular">Popular</Link>
           </li>
           <li>
-            <Link>Top Rated</Link>
-          </li>
-          <li>
-            <Link>Link</Link>
+            <Link to="/movies/toprated">Top Rated</Link>
           </li>
         </ul>
       </div>

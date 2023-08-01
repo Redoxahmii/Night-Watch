@@ -34,7 +34,7 @@ const Home = () => {
           />
         </div>
       </div>
-      <div className="flex flex-wrap gap-5 mt-20">
+      <div className="flex flex-wrap w-screen pl-10  gap-5 mt-20">
         {Response.map((movie, index) => (
           <div key={index}>
             <Card movie={movie}></Card>

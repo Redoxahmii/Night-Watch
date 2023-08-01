@@ -18,9 +18,11 @@ export const getAllMovies = async (req, res) => {
     // Generate video embed URLs for each movie using vidsrc.me API
     const moviesWithEmbedUrls = await Promise.all(
       movies.map(async (movie) => {
+        const navigateLink = `/movies/${movie.id}`;
         const posterPath = `${baseUrl}${movie.poster_path}`;
         return {
           ...movie,
+          navigateLink,
           posterPath,
         };
       })
@@ -40,15 +42,23 @@ export const getOneMovie = async (req, res) => {
     const tmdbUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${tmdbApiKey}`;
     const tmdbResponse = await axios.get(tmdbUrl);
     const data = tmdbResponse.data;
-    const { title, overview, poster_path, release_date, status, tagline } =
-      data;
+    const {
+      title,
+      overview,
+      poster_path,
+      release_date,
+      status,
+      tagline,
+      vote_average,
+    } = data;
     const baseUrl = "https://image.tmdb.org/t/p/w500";
     const PosterPath = `${baseUrl}${poster_path}`;
 
-    const embedUrl = `https://vidsrc.me/embed/movie?tmdb=${movieId}`;
+    const embedUrl = `https://vidsrc.me/embed/movie?tmdb=${movieId}&color=000000`;
     const MovieData = {
       title,
       overview,
+      vote_average,
       PosterPath,
       release_date,
       status,
