@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Loader from "../components/Loader";
 import { useParams } from "react-router-dom";
 
 const MovieDetails = () => {
@@ -24,7 +25,7 @@ const MovieDetails = () => {
   }, [movieId]);
 
   if (!movieDetails) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   const {
@@ -39,7 +40,7 @@ const MovieDetails = () => {
 
   return (
     <div className="flex w-screen h-[91vh] gap-48">
-      <div className=" w-[30vw] flex flex-col pl-5 gap-5 mt-20">
+      <div className=" w-[20vw] flex flex-col pl-5 gap-5 mt-20">
         <img
           className=" object-contain w-40 h-40"
           src={PosterPath}
@@ -51,7 +52,7 @@ const MovieDetails = () => {
         <p>Status: {status}</p>
         <p>Release Date: {release_date}</p>
       </div>
-      <div className=" w-[60vw] flex">
+      <div className="w-[70vw] flex">
         <iframe
           src={embedUrl}
           allowFullScreen

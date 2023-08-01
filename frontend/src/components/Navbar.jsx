@@ -5,7 +5,7 @@ const Navbar = () => {
     <div className="navbar bg-primary-content rounded-xl">
       <div className="flex-1">
         <Link to="/" className="btn btn-ghost normal-case text-xl">
-          MovieDatabase
+          Night Watch
         </Link>
       </div>
       <div className="flex-none">

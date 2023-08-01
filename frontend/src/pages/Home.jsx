@@ -5,22 +5,31 @@ const Home = () => {
   const [Response, setResponse] = useState([]);
 
   useEffect(() => {
-    const searchMovies = async () => {
+    const debounceSearch = debounce(async () => {
       const response = await fetch(
         "http://localhost:3000/api/movie/search?query=" + searchTerm
       ).then((response) => response.json());
       setResponse(response);
-    };
-    searchMovies();
+    }, 3000); // Adjust the debounce delay as per your preference (e.g., 300ms)
+
+    debounceSearch();
   }, [searchTerm]);
+
+  function debounce(func, delay) {
+    let timerId;
+    return function (...args) {
+      clearTimeout(timerId);
+      timerId = setTimeout(() => func.apply(this, args), delay);
+    };
+  }
 
   return (
     <>
       <div className="w-screen mt-40 flex items-center justify-center">
         <div className=" flex flex-col items-center justify-center gap-4">
-          <div className="bg-gradient-to-r from-secondary/70 to-primary bg-clip-text">
+          <div className="bg-gradient-to-r from-secondary/70 to-primary bg-clip-text h-[85px]">
             <h1 className="text-7xl tracking-tighter text-transparent">
-              Welcome to Movie Database
+              Welcome to Night Watch
             </h1>
           </div>
           <div className=" w-full max-w-3xl text-center pt-4 mb-2">
