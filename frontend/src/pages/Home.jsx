@@ -18,7 +18,7 @@ const Home = () => {
     <>
       <div className="w-screen mt-40 flex items-center justify-center">
         <div className=" flex flex-col items-center justify-center gap-4">
-          <div className="bg-gradient-to-r from-blue-300 to-purple-500 bg-clip-text">
+          <div className="bg-gradient-to-r from-secondary/70 to-primary bg-clip-text">
             <h1 className="text-7xl tracking-tighter text-transparent">
               Welcome to Movie Database
             </h1>
@@ -32,7 +32,7 @@ const Home = () => {
           <input
             type="text"
             placeholder="Search for movies"
-            className="input input-bordered w-96 border-purple-400"
+            className="input input-bordered w-96 input-primary"
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>

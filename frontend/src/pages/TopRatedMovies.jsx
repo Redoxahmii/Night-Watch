@@ -37,11 +37,16 @@ const TopRatedMovies = () => {
   };
 
   return (
-    <div className=" w-screen items-center justify-center flex flex-col">
-      <h1 className=" text-7xl mt-10">Top Rated Movies</h1>
-      <div className=" flex gap-5 font-bold text-2xl my-10">
-        <button onClick={handleNextPage}>Next Page</button>
-        <button onClick={handlePreviousPage}>Previous Page</button>
+    <div className=" w-screen items-center justify-center flex flex-col gap-10">
+      <h1 className=" text-6xl mt-10 tracking-tighter">Top Rated Movies</h1>
+      <div className="join">
+        <button className="join-item btn text-2xl" onClick={handlePreviousPage}>
+          «
+        </button>
+        <p className="join-item btn normal-case text-md">Page {page}</p>
+        <button className="join-item btn text-2xl" onClick={handleNextPage}>
+          »
+        </button>
       </div>
       <div className="flex flex-wrap gap-16 pl-5 w-screen">
         {movies.map((movie, index) => (
@@ -50,9 +55,14 @@ const TopRatedMovies = () => {
           </div>
         ))}
       </div>
-      <div className=" flex gap-5 font-bold text-2xl my-10">
-        <button onClick={handleNextPage}>Next Page</button>
-        <button onClick={handlePreviousPage}>Previous Page</button>
+      <div className="join">
+        <button className="join-item btn" onClick={handlePreviousPage}>
+          «
+        </button>
+        <p className="join-item btn normal-case">Page {page}</p>
+        <button className="join-item btn" onClick={handleNextPage}>
+          »
+        </button>
       </div>
     </div>
   );

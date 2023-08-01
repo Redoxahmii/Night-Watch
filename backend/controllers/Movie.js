@@ -54,7 +54,7 @@ export const getOneMovie = async (req, res) => {
     const baseUrl = "https://image.tmdb.org/t/p/w500";
     const PosterPath = `${baseUrl}${poster_path}`;
 
-    const embedUrl = `https://vidsrc.me/embed/movie?tmdb=${movieId}&color=000000`;
+    const embedUrl = `https://vidsrc.me/embed/movie?tmdb=${movieId}&color=472e5d`;
     const MovieData = {
       title,
       overview,

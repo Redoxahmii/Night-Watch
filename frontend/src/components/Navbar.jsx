@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <div className="navbar bg-primary rounded-xl">
+    <div className="navbar bg-primary-content rounded-xl">
       <div className="flex-1">
         <Link to="/" className="btn btn-ghost normal-case text-xl">
           MovieDatabase
