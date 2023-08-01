@@ -57,3 +57,30 @@ export const getOneMovie = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch movie." });
   }
 };
+
+export const searchMovies = async (req, res) => {
+  try {
+    const { query } = req.query;
+    const tmdbApiKey = process.env.TMDB_API_KEY;
+    const tmdbUrl = `https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&query=${query}`;
+    const tmdbResponse = await axios.get(tmdbUrl);
+    const movies = tmdbResponse.data.results;
+    const baseUrl = "https://image.tmdb.org/t/p/w500";
+    const moviesWithEmbedUrls = await Promise.all(
+      movies.map(async (movie) => {
+        const navigateLink = `/movies/${movie.id}`;
+        const posterPath = `${baseUrl}${movie.poster_path}`;
+        const embedUrl = `https://vidsrc.me/embed/movie?tmdb=${movie.id}`;
+        return {
+          ...movie,
+          navigateLink,
+          posterPath,
+          embedUrl,
+        };
+      })
+    );
+    res.json(moviesWithEmbedUrls);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch movie." });
+  }
+};
