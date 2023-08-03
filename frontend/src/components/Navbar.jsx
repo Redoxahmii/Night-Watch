@@ -11,10 +11,13 @@ const Navbar = () => {
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <Link to="/movies/popular">Popular</Link>
+            <Link to="/movies/popular">Popular Movies</Link>
           </li>
           <li>
-            <Link to="/movies/toprated">Top Rated</Link>
+            <Link to="/movies/toprated">Top Rated Movies</Link>
+          </li>
+          <li>
+            <Link to="/tvshows/popular">Popular Shows</Link>
           </li>
         </ul>
       </div>
