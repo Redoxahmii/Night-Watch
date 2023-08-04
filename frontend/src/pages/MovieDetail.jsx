@@ -1,31 +1,44 @@
-// MovieDetails.js
-
 import { useState, useEffect } from "react";
-import axios from "axios";
 import Loader from "../components/Loader";
 import { useParams } from "react-router-dom";
+import MovieError from "./MovieError";
 
 const MovieDetails = () => {
   const { movieId } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchMovieDetails() {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/api/movie/${movieId}`
-        ); // Replace this with the actual API endpoint to get a specific movie
-        setMovieDetails(response.data);
+        const res = await fetch(`http://localhost:3000/api/movie/${movieId}`);
+        const data = await res.json();
+        if (res.status !== 200) {
+          setError(data.error);
+        } else {
+          setMovieDetails(data);
+        }
       } catch (error) {
         console.error("Failed to fetch movie details:", error);
+      } finally {
+        setLoading(false);
       }
     }
 
     fetchMovieDetails();
   }, [movieId]);
 
-  if (!movieDetails) {
+  if (error) {
+    return <MovieError />;
+  }
+
+  if (loading && !movieDetails) {
     return <Loader />;
+  }
+
+  if (!movieDetails) {
+    return <div>TV show not found.</div>;
   }
 
   const {

@@ -10,7 +10,7 @@ const Home = () => {
         "http://localhost:3000/api/movie/search?query=" + searchTerm
       ).then((response) => response.json());
       setResponse(response);
-    }, 3000); // Adjust the debounce delay as per your preference (e.g., 300ms)
+    }, 3000);
 
     debounceSearch();
   }, [searchTerm]);
@@ -49,7 +49,7 @@ const Home = () => {
       <div className="flex flex-wrap w-screen pl-10 gap-5 mt-20">
         {Response.map((movie, index) => (
           <div key={index}>
-            <Card movie={movie}></Card>
+            <Card Data={movie}></Card>
           </div>
         ))}
       </div>

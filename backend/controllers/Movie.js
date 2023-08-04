@@ -65,6 +65,12 @@ export const getOneMovie = async (req, res) => {
       tagline,
       embedUrl,
     };
+    const vidsrcResponse = await axios.head(embedUrl);
+    if (vidsrcResponse.status !== 200) {
+      return res
+        .status(404)
+        .json({ error: "Movie or TV show not found on VidSrc." });
+    }
     res.status(200).json(MovieData);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch movies. Try again later" });

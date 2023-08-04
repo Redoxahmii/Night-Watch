@@ -1,22 +1,45 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "../components/Loader";
+import ShowError from "./ShowError";
 
 const ShowsDetail = () => {
   const { showId } = useParams();
   const [showDetails, setShowDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [genres, setGenres] = useState([]);
   useEffect(() => {
     const fetchShows = async () => {
-      const res = await fetch(`http://localhost:3000/api/tvshow/${showId}`);
-      const data = await res.json();
-      setShowDetails(data);
-      setGenres(data.genres);
+      try {
+        const res = await fetch(`http://localhost:3000/api/tvshow/${showId}`);
+        const data = await res.json();
+        if (res.status !== 200) {
+          setError(data.error);
+        } else {
+          setShowDetails(data);
+          setGenres(data.genres);
+        }
+      } catch (error) {
+        setError("Something went wrong. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
     };
     fetchShows();
   }, [showId]);
-  if (!showDetails) {
+
+  // If there was an error during the API request, show the error message
+  if (error) {
+    return <ShowError />;
+  }
+
+  if (loading && !showDetails) {
     return <Loader />;
+  }
+
+  if (!showDetails) {
+    return <div>TV show not found.</div>;
   }
   const {
     title,

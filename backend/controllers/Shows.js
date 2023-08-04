@@ -73,10 +73,16 @@ export const getOneShow = async (req, res) => {
       embedUrl,
       episode_run_time: data.episode_run_time[0],
     };
+    const vidsrcResponse = await axios.head(embedUrl);
+    if (vidsrcResponse.status !== 200) {
+      return res
+        .status(404)
+        .json({ error: "Movie or TV show not found on VidSrc." });
+    }
     res.status(200).json(ShowData);
   } catch (error) {
     res
-      .status(500)
+      .status(402)
       .json({ error: "Failed to fetch TV shows. Try again later" });
   }
 };
