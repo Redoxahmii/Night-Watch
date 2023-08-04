@@ -31,7 +31,7 @@ const MovieDetails = () => {
   const {
     title,
     overview,
-    PosterPath,
+    posterPath,
     release_date,
     status,
     tagline,
@@ -43,7 +43,7 @@ const MovieDetails = () => {
       <div className=" w-[20vw] flex flex-col pl-5 gap-5 mt-20">
         <img
           className=" object-contain w-40 h-40"
-          src={PosterPath}
+          src={posterPath}
           alt={title}
         />
         <h1 className=" text-4xl">{title}</h1>

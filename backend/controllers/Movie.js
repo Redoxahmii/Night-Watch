@@ -31,7 +31,7 @@ export const getAllMovies = async (req, res) => {
     res.json(moviesWithEmbedUrls);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to fetch movies." });
+    res.status(500).json({ error: "Failed to fetch movies. Try again later" });
   }
 };
 
@@ -52,14 +52,14 @@ export const getOneMovie = async (req, res) => {
       vote_average,
     } = data;
     const baseUrl = "https://image.tmdb.org/t/p/w500";
-    const PosterPath = `${baseUrl}${poster_path}`;
+    const posterPath = `${baseUrl}${poster_path}`;
 
     const embedUrl = `https://vidsrc.me/embed/movie?tmdb=${movieId}&color=472e5d`;
     const MovieData = {
       title,
       overview,
       vote_average,
-      PosterPath,
+      posterPath,
       release_date,
       status,
       tagline,
@@ -67,7 +67,7 @@ export const getOneMovie = async (req, res) => {
     };
     res.status(200).json(MovieData);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch movie." });
+    res.status(500).json({ error: "Failed to fetch movies. Try again later" });
   }
 };
 
@@ -94,6 +94,6 @@ export const searchMovies = async (req, res) => {
     );
     res.json(moviesWithEmbedUrls);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch movie." });
+    res.status(500).json({ error: "Failed to fetch movie. Try again later." });
   }
 };

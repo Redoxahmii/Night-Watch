@@ -19,6 +19,9 @@ const Navbar = () => {
           <li>
             <Link to="/tvshows/popular">Popular Shows</Link>
           </li>
+          <li>
+            <Link to="/tvshows/toprated">Top Rated Shows</Link>
+          </li>
         </ul>
       </div>
     </div>

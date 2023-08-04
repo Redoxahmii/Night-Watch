@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 
-const Card = ({ movie }) => {
-  const { title, navigateLink, posterPath, overview, vote_average } = movie;
+const Card = ({ Data }) => {
+  const { title, navigateLink, posterPath, overview, vote_average } = Data;
   return (
     <div className="card card-compact w-full max-w-md bg-primary-content rounded-xl shadow-xl">
       <figure>

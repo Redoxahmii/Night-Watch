@@ -1,55 +1,52 @@
-import { useState, useEffect, useContext } from "react";
-import Card from "../components/Card";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import Card from "../components/Card";
 import Loader from "../components/Loader";
 import { PageContext } from "../utils/PageContext";
-const PopularMovies = () => {
-  const { popularMoviePage, setPopularMoviePage } = useContext(PageContext);
-  const [movies, setMovies] = useState([]);
+const TopRatedShows = () => {
+  const { ratedTvPage, setRatedTvPage } = useContext(PageContext);
+  const [shows, setShows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   useEffect(() => {
-    async function fetchMovies() {
+    const fetchShows = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/api/movie/allmovies",
+        const res = await axios.get(
+          "http://localhost:3000/api/tvshow/allshows",
           {
             params: {
-              page: popularMoviePage,
-              category: "popular",
+              category: "top_rated",
+              page: ratedTvPage,
             },
           }
         );
-        setMovies(response.data);
+        setShows(res.data);
         setLoading(false);
       } catch (error) {
-        setError(error.response.data.error);
         setLoading(false);
+        setError(error.response.data.error);
       }
-    }
-    fetchMovies();
-  }, [popularMoviePage]);
-
+    };
+    fetchShows();
+  }, [ratedTvPage]);
   const handleNextPage = () => {
-    setPopularMoviePage((prevPage) => prevPage + 1);
+    setRatedTvPage((prevPage) => prevPage + 1);
   };
 
   const handlePreviousPage = () => {
-    if (popularMoviePage > 1) {
-      setPopularMoviePage((prevPage) => prevPage - 1);
+    if (ratedTvPage > 1) {
+      setRatedTvPage((prevPage) => prevPage - 1);
     }
   };
-
   return (
     <div className=" w-screen items-center justify-center flex flex-col gap-10">
-      <h1 className=" text-6xl mt-10 tracking-tighter">Popular Movies</h1>
+      <h1 className=" text-6xl mt-10 tracking-tighter">Top Rated TV Shows</h1>
       <div className="join">
         <button className="join-item btn text-2xl" onClick={handlePreviousPage}>
           «
         </button>
-        <p className="join-item btn normal-case text-md">
-          Page {popularMoviePage}
-        </p>
+        <p className="join-item btn normal-case text-md">Page {ratedTvPage}</p>
         <button className="join-item btn text-2xl" onClick={handleNextPage}>
           »
         </button>
@@ -75,8 +72,10 @@ const PopularMovies = () => {
         </div>
       ) : (
         <div className="flex flex-wrap gap-16 pl-5 w-screen">
-          {movies.map((movie, index) => (
-            <Card key={index} Data={movie}></Card>
+          {shows.map((movie, index) => (
+            <div key={index}>
+              <Card Data={movie}></Card>
+            </div>
           ))}
         </div>
       )}
@@ -84,7 +83,7 @@ const PopularMovies = () => {
         <button className="join-item btn" onClick={handlePreviousPage}>
           «
         </button>
-        <p className="join-item btn normal-case">Page {popularMoviePage}</p>
+        <p className="join-item btn normal-case">Page {ratedTvPage}</p>
         <button className="join-item btn" onClick={handleNextPage}>
           »
         </button>
@@ -93,4 +92,4 @@ const PopularMovies = () => {
   );
 };
 
-export default PopularMovies;
+export default TopRatedShows;
