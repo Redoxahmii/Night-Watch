@@ -52,7 +52,10 @@ export const getOneShow = async (req, res) => {
     const seasons = data.seasons.map((season) => ({
       seasonNumber: season.season_number,
       seasonName: season.name,
-      episodeCount: season.episode_count,
+      episodeCount: Array.from(
+        { length: season.episode_count },
+        (_, i) => i + 1
+      ),
     }));
 
     const {
