@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
+/* eslint-disable react/prop-types */
+import { useContext, useEffect, useState } from "react";
 import Card from "../components/Card";
-const Home = ({ logout, username }) => {
+import { PageContext } from "../utils/PageContext";
+const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const { logout, username } = useContext(PageContext);
   const [Response, setResponse] = useState([]);
 
   useEffect(() => {
     const debounceSearch = debounce(async () => {
       const response = await fetch(
-        "http://localhost:3000/api/movie/search?query=" + searchTerm
+        "http://127.0.0.1:3000/api/movie/search?query=" + searchTerm
       ).then((response) => response.json());
       setResponse(response);
     }, 3000);

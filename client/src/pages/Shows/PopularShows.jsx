@@ -13,7 +13,7 @@ const PopularShows = () => {
     const fetchShows = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3000/api/tvshow/allshows",
+          "http://127.0.0.1:3000/api/tvshow/allshows",
           {
             params: {
               category: "popular",

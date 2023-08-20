@@ -13,7 +13,7 @@ const TopRatedMovies = () => {
     async function fetchMovies() {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/movie/allmovies`,
+          `http://127.0.0.1:3000/api/movie/allmovies`,
           {
             params: {
               page: ratedMoviePage,

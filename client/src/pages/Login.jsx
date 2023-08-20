@@ -22,7 +22,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/api/user/login",
+        "http://127.0.0.1:3000/api/user/login",
         {
           ...input,
         },
@@ -38,6 +38,7 @@ const Login = () => {
       }
       setTimeout(() => {
         navigate("/");
+        window.location.reload();
       }, 2000);
     } catch (error) {
       setError(error.response.data.message);

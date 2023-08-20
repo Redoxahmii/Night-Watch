@@ -7,20 +7,21 @@ const ShowsDetail = () => {
   const { showId, season, episode } = useParams();
   const [showDetails, setShowDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [buttonReload, setbuttonReload] = useState(true);
+  const [buttonReload, setButtonReload] = useState(true);
   const [error, setError] = useState(null);
   const [selectedSeason, setSelectedSeason] = useState(season);
   const [selectedEpisode, setSelectedEpisode] = useState(episode);
   const [genres, setGenres] = useState([]);
   const navigate = useNavigate();
+  const [selectedSeasonIndex, setSelectedSeasonIndex] = useState(0);
 
   useEffect(() => {
     const fetchShows = async () => {
       setLoading(true);
-      setbuttonReload(true);
+      setButtonReload(true);
       try {
         const res = await fetch(
-          `http://localhost:3000/api/tvshow/${showId}/${selectedSeason}/${selectedEpisode}`
+          `http://127.0.0.1:3000/api/tvshow/${showId}/${selectedSeason}/${selectedEpisode}`
         );
         const data = await res.json();
         if (res.status !== 200) {
@@ -28,7 +29,7 @@ const ShowsDetail = () => {
         } else {
           setShowDetails(data);
           setGenres(data.genres);
-          setbuttonReload(false);
+          setButtonReload(false);
         }
       } catch (error) {
         setError("Something went wrong. Please try again later.");
@@ -37,7 +38,7 @@ const ShowsDetail = () => {
       }
     };
     fetchShows();
-  }, [selectedEpisode, selectedSeason, showId]);
+  }, [selectedEpisode, selectedSeason, showId, selectedSeasonIndex]);
 
   if (error) {
     return <ShowError />;
@@ -62,69 +63,88 @@ const ShowsDetail = () => {
     embedUrl,
     seasons,
   } = showDetails;
+
   return (
     <>
       <div className="flex w-screen h-screen">
-        <div className=" w-[40vw] flex flex-col pl-5 gap-2 mt-20 mr-20">
+        <div className="w-[40vw] flex flex-col pl-5 gap-2 mt-20 mr-20">
           <img
-            className=" object-contain w-40 h-40"
+            className="object-contain w-40 h-40"
             src={posterPath}
             alt={title}
           />
-          <h1 className=" text-4xl">{title}</h1>
-
+          <h1 className="text-4xl">{title}</h1>
           <p className="text-slate-500">{tagline}</p>
           <p>{overview}</p>
-          <div className=" flex gap-2">
+          <div className="flex gap-2">
             Genre :
-            {genres.map((genre, index) => {
-              return <p key={index}>{genre}</p>;
-            })}
+            {genres.map((genre, index) => (
+              <p key={index}>{genre}</p>
+            ))}
           </div>
           {episode_run_time && <p>Episode Runtime : {episode_run_time}</p>}
           <p>Number of Seasons: {number_of_seasons}</p>
           <p>Number of Episodes: {number_of_episodes}</p>
         </div>
         <div className="w-[70vw] flex">
-          <iframe
-            src={embedUrl}
-            allowFullScreen
-            className="w-full aspect-video"
-          ></iframe>
+          {loading && (
+            <div className="w-full aspect-video flex items-center justify-center">
+              <Loader />
+            </div>
+          )}
+          {!loading && (
+            <iframe
+              src={embedUrl}
+              allowFullScreen
+              className="w-full aspect-video"
+            ></iframe>
+          )}
         </div>
       </div>
-      <div className=" flex flex-wrap">
-        {seasons.map((season, seasonIndex) => (
-          <div key={seasonIndex}>
-            <div className="dropdown">
-              <button
-                tabIndex={0}
-                disabled={buttonReload}
-                className="btn btn-primary m-1 normal-case"
-              >
-                {season.seasonName}
-              </button>
-              <ul className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-                {season.episodeCount.map((episode, episodeIndex) => (
-                  <li key={episodeIndex}>
-                    <button
-                      disabled={buttonReload}
-                      onClick={() => {
-                        setSelectedSeason(season.seasonNumber);
-                        setSelectedEpisode(episode);
-                        navigate(
-                          `/tvshows/${showId}/${season.seasonNumber}/${episode}`
-                        );
-                      }}
-                    >
-                      Episode {episodeIndex + 1}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        ))}
+      <div className="flex flex-wrap">
+        <div className="dropdown dropdown-top">
+          <button
+            tabIndex={0}
+            disabled={buttonReload}
+            className="btn btn-neutral m-1 normal-case"
+          >
+            {seasons[selectedSeasonIndex].seasonName}
+          </button>
+          <ul className="dropdown-content z-[1] flex gap-2  shadow bg-base-300 menu menu-horizontal w-[500px] ">
+            {seasons.map((season, seasonIndex) => (
+              <li key={seasonIndex}>
+                <button
+                  disabled={buttonReload}
+                  onClick={() => setSelectedSeasonIndex(seasonIndex)}
+                >
+                  {season.seasonName}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="flex flex-wrap">
+          {seasons[selectedSeasonIndex].episodeCount.map(
+            (episode, episodeIndex) => (
+              <div key={episodeIndex} className="p-2">
+                <button
+                  disabled={buttonReload}
+                  onClick={() => {
+                    setSelectedSeason(
+                      seasons[selectedSeasonIndex].seasonNumber
+                    );
+                    setSelectedEpisode(episode);
+                    navigate(
+                      `/tvshows/${showId}/${seasons[selectedSeasonIndex].seasonNumber}/${episode}`
+                    );
+                  }}
+                >
+                  Episode {episodeIndex + 1}
+                </button>
+              </div>
+            )
+          )}
+        </div>
       </div>
     </>
   );

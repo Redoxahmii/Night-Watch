@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const ShowCard = ({ Data }) => {
   const { title, navigateLink, posterPath, overview, vote_average } = Data;
