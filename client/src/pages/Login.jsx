@@ -38,7 +38,6 @@ const Login = () => {
       }
       setTimeout(() => {
         navigate("/");
-        window.location.reload();
       }, 2000);
     } catch (error) {
       setError(error.response.data.message);
