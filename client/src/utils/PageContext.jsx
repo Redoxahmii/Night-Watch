@@ -50,7 +50,7 @@ export const PageProvider = ({ children }) => {
       setUsername(null);
       removeCookie("token");
       window.location.reload();
-      console.log(res.data.message);
+      console.log(res.data);
     } catch (error) {
       console.log(error);
     }
