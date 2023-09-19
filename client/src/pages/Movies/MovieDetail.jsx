@@ -12,7 +12,9 @@ const MovieDetails = () => {
   useEffect(() => {
     async function fetchMovieDetails() {
       try {
-        const res = await fetch(`http://127.0.0.1:3000/api/movie/${movieId}`);
+        const res = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/api/movie/${movieId}`
+        );
         const data = await res.json();
         if (res.status !== 200) {
           setError(data.error);

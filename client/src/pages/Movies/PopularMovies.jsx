@@ -12,7 +12,7 @@ const PopularMovies = () => {
     async function fetchMovies() {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:3000/api/movie/allmovies",
+          `${import.meta.env.VITE_SERVER_URL}/api/movie/allmovies`,
           {
             params: {
               page: popularMoviePage,

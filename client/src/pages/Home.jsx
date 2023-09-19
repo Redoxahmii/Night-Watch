@@ -9,7 +9,8 @@ const Home = () => {
   const handleSubmit = async () => {
     try {
       const response = await fetch(
-        "http://127.0.0.1:3000/api/movie/search?query=" + searchTerm
+        `${import.meta.env.VITE_SERVER_URL}/api/movie/search?query=` +
+          searchTerm
       ).then((response) => response.json());
       if (response.error) {
         setError(response.error); // Set a specific error message from the server.

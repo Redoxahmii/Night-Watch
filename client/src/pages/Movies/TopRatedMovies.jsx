@@ -13,7 +13,7 @@ const TopRatedMovies = () => {
     async function fetchMovies() {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:3000/api/movie/allmovies`,
+          `${import.meta.env.VITE_SERVER_URL}/api/movie/allmovies`,
           {
             params: {
               page: ratedMoviePage,
@@ -77,9 +77,7 @@ const TopRatedMovies = () => {
       ) : (
         <div className="flex flex-wrap gap-16 pl-5 w-screen">
           {movies.map((movie, index) => (
-            <div key={index}>
-              <Card Data={movie}></Card>
-            </div>
+            <Card key={index} Data={movie}></Card>
           ))}
         </div>
       )}

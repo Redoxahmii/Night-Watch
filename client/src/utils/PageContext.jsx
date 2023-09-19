@@ -23,7 +23,7 @@ export const PageProvider = ({ children }) => {
 
       try {
         const { data } = await axios.post(
-          "http://127.0.0.1:3000/api/user",
+          `${import.meta.env.VITE_SERVER_URL}/api/user`,
           {},
           { withCredentials: true }
         );
@@ -43,7 +43,7 @@ export const PageProvider = ({ children }) => {
   const logout = () => {
     try {
       const res = axios.post(
-        "http://127.0.0.1:3000/api/user/logout",
+        `${import.meta.env.VITE_SERVER_URL}/api/user/logout`,
         {},
         { withCredentials: true }
       );

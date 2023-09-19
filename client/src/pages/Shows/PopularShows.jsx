@@ -13,7 +13,7 @@ const PopularShows = () => {
     const fetchShows = async () => {
       try {
         const res = await axios.get(
-          "http://127.0.0.1:3000/api/tvshow/allshows",
+          `${import.meta.env.VITE_SERVER_URL}/api/tvshow/allshows`,
           {
             params: {
               category: "popular",
@@ -75,9 +75,7 @@ const PopularShows = () => {
       ) : (
         <div className="flex flex-wrap gap-16 pl-5 w-screen">
           {shows.map((movie, index) => (
-            <div key={index}>
-              <Card Data={movie}></Card>
-            </div>
+            <Card key={index} Data={movie}></Card>
           ))}
         </div>
       )}

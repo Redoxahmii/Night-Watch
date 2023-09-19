@@ -21,7 +21,9 @@ const ShowsDetail = () => {
       setButtonReload(true);
       try {
         const res = await fetch(
-          `http://127.0.0.1:3000/api/tvshow/${showId}/${selectedSeason}/${selectedEpisode}`
+          `${
+            import.meta.env.VITE_SERVER_URL
+          }/api/tvshow/${showId}/${selectedSeason}/${selectedEpisode}`
         );
         const data = await res.json();
         if (res.status !== 200) {

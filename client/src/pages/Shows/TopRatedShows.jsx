@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Loader from "../../components/Loader";
 import { PageContext } from "../../utils/PageContext";
-import ShowCard from "./ShowCard";
+import Card from "../../components/Card";
 const TopRatedShows = () => {
   const { ratedTvPage, setRatedTvPage } = useContext(PageContext);
   const [shows, setShows] = useState([]);
@@ -13,7 +13,7 @@ const TopRatedShows = () => {
     const fetchShows = async () => {
       try {
         const res = await axios.get(
-          "http://127.0.0.1:3000/api/tvshow/allshows",
+          `${import.meta.env.VITE_SERVER_URL}/api/tvshow/allshows`,
           {
             params: {
               category: "top_rated",
@@ -73,9 +73,7 @@ const TopRatedShows = () => {
       ) : (
         <div className="flex flex-wrap gap-16 pl-5 w-screen">
           {shows.map((movie, index) => (
-            <div key={index}>
-              <ShowCard Data={movie}></ShowCard>
-            </div>
+            <Card key={index} Data={movie}></Card>
           ))}
         </div>
       )}

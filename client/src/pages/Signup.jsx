@@ -23,7 +23,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://127.0.0.1:3000/api/user/signup",
+        `${import.meta.env.VITE_SERVER_URL}/api/user/signup`,
         {
           ...input,
         },
