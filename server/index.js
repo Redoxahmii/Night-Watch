@@ -16,7 +16,6 @@ app.use(express.urlencoded({ extended: true }));
 // Specify the IP address (127.0.0.1) and port (e.g., 5000)
 const serverAddress = process.env.ORIGIN;
 const serverPort = process.env.PORT || 5000;
-console.log(serverAddress);
 app.use(
   cors({
     // Use the serverAddress variable for the origin
