@@ -14,13 +14,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Specify the IP address (127.0.0.1) and port (e.g., 5000)
-const serverAddress = "127.0.0.1";
+const serverAddress = process.env.ORIGIN;
 const serverPort = process.env.PORT || 5000;
-
+console.log(serverAddress);
 app.use(
   cors({
     // Use the serverAddress variable for the origin
-    origin: `http://${serverAddress}:5173`,
+    origin: `${serverAddress}`,
     credentials: true,
   })
 );
@@ -41,8 +41,8 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    app.listen(serverPort, serverAddress, () => {
-      console.log(`Server is running on http://${serverAddress}:${serverPort}`);
+    app.listen(serverPort, () => {
+      console.log(`Server is running on ${serverPort}`);
     });
   })
   .catch((err) => {

@@ -20,10 +20,14 @@ export const getAllMovies = async (req, res) => {
       movies.map(async (movie) => {
         const navigateLink = `/movies/${movie.id}`;
         const posterPath = `${baseUrl}${movie.poster_path}`;
+
+        // Check if the poster image exists
+        const imageExists = await checkImageExists(posterPath);
+
         return {
           ...movie,
           navigateLink,
-          posterPath,
+          posterPath: imageExists ? posterPath : "", // Set an empty path if the image doesn't exist
         };
       })
     );
@@ -55,16 +59,21 @@ export const getOneMovie = async (req, res) => {
     const posterPath = `${baseUrl}${poster_path}`;
 
     const embedUrl = `https://vidsrc.to/embed/movie/${movieId}`;
+
+    // Check if the poster image exists
+    const imageExists = await checkImageExists(posterPath);
+
     const MovieData = {
       title,
       overview,
       vote_average,
-      posterPath,
+      posterPath: imageExists ? posterPath : "", // Set an empty path if the image doesn't exist
       release_date,
       status,
       tagline,
       embedUrl,
     };
+
     const vidsrcResponse = await axios.head(embedUrl);
     if (vidsrcResponse.status !== 200) {
       return res
@@ -85,17 +94,41 @@ export const searchMovies = async (req, res) => {
     const tmdbResponse = await axios.get(tmdbUrl);
     const movies = tmdbResponse.data.results;
     const baseUrl = "https://image.tmdb.org/t/p/w500";
+
     const moviesWithEmbedUrls = await Promise.all(
       movies.map(async (movie) => {
         const navigateLink = `/movies/${movie.id}`;
         const posterPath = `${baseUrl}${movie.poster_path}`;
         const embedUrl = `https://vidsrc.to/embed/movie/${movie.id}`;
-        return {
-          ...movie,
-          navigateLink,
-          posterPath,
-          embedUrl,
-        };
+
+        // Check if the poster image exists
+        try {
+          const imageExists = await checkImageExists(posterPath);
+          if (imageExists) {
+            return {
+              ...movie,
+              navigateLink,
+              posterPath,
+              embedUrl,
+            };
+          } else {
+            // If the image doesn't exist, return an empty posterPath
+            return {
+              ...movie,
+              navigateLink,
+              posterPath: "",
+              embedUrl,
+            };
+          }
+        } catch (error) {
+          console.error("Error checking image existence:", error);
+          return {
+            ...movie,
+            navigateLink,
+            posterPath: "",
+            embedUrl,
+          };
+        }
       })
     );
     res.json(moviesWithEmbedUrls);
@@ -103,3 +136,12 @@ export const searchMovies = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch movie. Try again later." });
   }
 };
+
+async function checkImageExists(url) {
+  try {
+    const response = await axios.head(url);
+    return response.status === 200;
+  } catch (error) {
+    return false; // Image doesn't exist
+  }
+}

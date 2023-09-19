@@ -3,7 +3,11 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["Inter", "sans-serif"],
+      },
+    },
   },
   plugins: [require("daisyui")],
   daisyui: {
@@ -12,8 +16,8 @@ export default {
       {
         black: {
           ...require("daisyui/src/theming/themes")["[data-theme=black]"],
-          primary: "#a855f7",
-          secondary: "#3b82f6",
+          // primary: "#a855f7",
+          // secondary: "#3b82f6",
         },
       },
     ],

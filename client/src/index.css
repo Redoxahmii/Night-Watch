@@ -3,5 +3,9 @@
 @tailwind utilities;
 
 :root {
-    @apply bg-base-200 text-base-content
+  @apply bg-base-200 text-base-content;
+}
+
+html {
+  overflow-x: hidden;
 }

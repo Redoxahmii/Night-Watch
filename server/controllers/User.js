@@ -15,7 +15,7 @@ export const Signup = async (req, res, next) => {
       httpOnly: false,
       withCredentials: true,
       sameSite: "None",
-      // secure: true,
+      secure: true,
     });
     res
       .status(200)
@@ -47,6 +47,7 @@ export const Login = async (req, res, next) => {
       httpOnly: false,
       withCredentials: true,
       sameSite: "None",
+      secure: true,
     });
     res
       .status(200)
