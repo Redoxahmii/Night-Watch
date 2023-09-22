@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { PageContext } from "../utils/PageContext";
 
 const Login = () => {
+  const { setCookie } = useContext(PageContext);
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -31,6 +33,7 @@ const Login = () => {
         }
       );
       const { success, message } = data;
+      setCookie("token", data.cookie);
       if (success) {
         setSuccess(message);
       } else {

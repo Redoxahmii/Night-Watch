@@ -92,9 +92,11 @@ const Navbar = () => {
                 <Link to="/signup">Signup</Link>
               </li>
               {username && <li>Welcome {username}</li>}
-              <li>
-                <button onClick={() => logout()}>Logout</button>
-              </li>
+              {username && (
+                <li>
+                  <button onClick={() => logout()}>Logout</button>
+                </li>
+              )}
             </ul>
           </div>
         </ul>

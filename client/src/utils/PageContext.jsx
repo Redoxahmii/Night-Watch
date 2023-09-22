@@ -11,48 +11,49 @@ export const PageProvider = ({ children }) => {
 
   const [popularTvPage, setPopularTvPage] = useState(1);
   const [ratedTvPage, setRatedTvPage] = useState(1);
-  const [cookies, removeCookie] = useCookies(["token"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]); // Add setCookie
   const [username, setUsername] = useState(null);
+
   useEffect(() => {
     const verifyCookie = async () => {
-      if (!cookies.token) {
-        return console.log("no cookie");
-      } else {
-        console.log("cookie");
-      }
-
       try {
-        const { data } = await axios.post(
-          `${import.meta.env.VITE_SERVER_URL}/api/user`,
-          {},
-          { withCredentials: true }
-        );
-        const { status, username } = data;
-        if (status) {
-          setUsername(username);
-        } else {
-          removeCookie("token");
+        if (cookies.token) {
+          const { data } = await axios.post(
+            `${import.meta.env.VITE_SERVER_URL}/api/user`,
+            {},
+            { withCredentials: true }
+          );
+          const { status, username } = data;
+          if (status) {
+            setUsername(username);
+          } else {
+            removeCookie("token");
+          }
         }
       } catch (error) {
         console.log(error);
+        // Handle the error, e.g., show an error message to the user
       }
     };
+
     verifyCookie();
   }, [cookies, username, removeCookie]);
 
-  const logout = () => {
+  const logout = async () => {
     try {
-      const res = axios.post(
+      await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/api/user/logout`,
         {},
         { withCredentials: true }
       );
+      if (cookies.token) {
+        removeCookie("token");
+      }
       setUsername(null);
-      removeCookie("token");
-      window.location.reload();
-      console.log(res.data);
+      // Redirect or show a message to the user after successful logout
     } catch (error) {
       console.log(error);
+      // Handle the error, e.g., show an error message to the user
     }
   };
 
@@ -65,6 +66,7 @@ export const PageProvider = ({ children }) => {
     setRatedMoviePage,
     popularTvPage,
     setPopularTvPage,
+    setCookie,
     ratedTvPage,
     setRatedTvPage,
   };
