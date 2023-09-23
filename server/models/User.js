@@ -4,13 +4,17 @@ import bcrypt from "bcrypt";
 const UserSchema = new mongoose.Schema({
   email: {
     type: String,
-    required: [true, "Your email is required"],
-    unique: true,
+    lowercase: true,
+    required: [true, "can't be blank"],
+    match: [/\S+@\S+\.\S+/, "is invalid"],
+    index: true,
   },
   username: {
     type: String,
-    required: [true, "Your username is required"],
-    unique: true,
+    lowercase: true,
+    required: [true, "can't be blank"],
+    match: [/^[a-zA-Z0-9]+$/, "is invalid"],
+    index: true,
   },
   password: {
     type: String,
@@ -20,6 +24,10 @@ const UserSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: new Date(),
+  },
+  watchList: {
+    type: Array,
+    default: [],
   },
 });
 
