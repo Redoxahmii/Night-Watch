@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import Loader from "../../components/Loader";
 import { useParams } from "react-router-dom";
 import MovieError from "./MovieError";
+import { Image } from "@nextui-org/react";
+import { Rocket, Star } from "lucide-react";
 
 const MovieDetails = () => {
   const { movieId } = useParams();
@@ -48,30 +50,44 @@ const MovieDetails = () => {
     overview,
     posterPath,
     release_date,
-    status,
+    vote_average,
     tagline,
     embedUrl,
   } = movieDetails;
 
   return (
-    <div className="flex w-screen pt-16 h-screen gap-48">
-      <div className=" w-[30vw] flex flex-col pl-5 gap-5 mt-20">
-        <img
-          className=" object-contain w-40 h-40"
+    <div className="flex flex-col lg:flex-row h-screen lg:mx-10 justify-between items-center">
+      <div className="flex flex-col lg:mt-8 mt-10 w-full lg:max-w-lg max-w-md">
+        <Image
+          width={130}
+          height={130}
+          className="hidden lg:block"
           src={posterPath}
           alt={title}
         />
-        <h1 className=" text-4xl">{title}</h1>
-        <p className="text-slate-500">{tagline}</p>
-        <p>{overview}</p>
-        <p>Status: {status}</p>
-        <p>Release Date: {release_date}</p>
+        <h1 className="text-3xl tracking-tighter pt-2 lg:mx-4">{title}</h1>
+        <p className="text-white/80 text-sm pt-2 lg:mx-4">{tagline}</p>
+        <p className="text-sm pt-3 lg:mx-4 lg:max-h-36 overflow-hidden text-ellipsis">
+          {overview}
+        </p>
+        <div className="flex items-center gap-2 pt-2 lg:mx-4">
+          <Star
+            size={20}
+            fill="currentColor"
+            className="text-yellow-400"
+          ></Star>
+          <p className="text-white/70 text-sm">{vote_average}</p>
+        </div>
+        <div className="flex items-center gap-2 pt-1 lg:mb-0 mb-5 lg:mx-4">
+          <Rocket size={20} className="text-red-400"></Rocket>
+          <p className="text-white/70 text-sm">{release_date}</p>
+        </div>
       </div>
-      <div className="w-[70vw] flex">
+      <div className="lg:flex w-full max-w-3xl aspect-video">
         <iframe
           src={embedUrl}
+          className="block w-full rounded-3xl"
           allowFullScreen
-          className=" w-full aspect-video"
         ></iframe>
       </div>
     </div>
