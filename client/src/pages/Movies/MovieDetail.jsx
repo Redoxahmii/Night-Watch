@@ -54,8 +54,8 @@ const MovieDetails = () => {
   } = movieDetails;
 
   return (
-    <div className="flex w-screen h-screen gap-48">
-      <div className=" w-[20vw] flex flex-col pl-5 gap-5 mt-20">
+    <div className="flex w-screen pt-16 h-screen gap-48">
+      <div className=" w-[30vw] flex flex-col pl-5 gap-5 mt-20">
         <img
           className=" object-contain w-40 h-40"
           src={posterPath}

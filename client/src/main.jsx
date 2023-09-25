@@ -8,13 +8,11 @@ import { PageProvider } from "./utils/PageContext.jsx";
 import { NextUIProvider } from "@nextui-org/react";
 
 // Create a BlurLayout component
-function BlurLayout({ children }) {
+export function BlurLayout({ children }) {
   return (
     <main className="text-foreground relative gradient-purple">
-      {/* Blur effect */}
-      <div className="absolute inset-0 backdrop-blur-sm backdrop-brightness-50"></div>
+      <div className="absolute inset-0 backdrop-brightness-50"></div>
 
-      {/* Content */}
       <div className="relative z-10">{children}</div>
     </main>
   );

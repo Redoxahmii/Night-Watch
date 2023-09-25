@@ -68,8 +68,8 @@ const Login = () => {
     });
   };
   return (
-    <div className=" w-screen items-center justify-center h-[90vh] flex">
-      <Card className=" flex items-center justify-center mt-10 p-10">
+    <div className="w-screen h-screen flex items-center justify-center">
+      <Card className="flex items-center justify-center p-10">
         <CardHeader className=" justify-center items-center">
           <h1 className="text-3xl font-semibold">Login</h1>
         </CardHeader>

@@ -63,12 +63,11 @@ const Home = () => {
 
   return (
     <>
-      <div className="w-screen h-[91vh] flex items-center justify-center pb-20">
+      <div className="w-screen h-[91vh] flex items-center justify-center ">
         <div className=" flex  flex-col items-center justify-center gap-4">
           <h1 className="text-7xl tracking-tighter text-secondary-700">
             Welcome to Night Watch
           </h1>
-          {/* </div> */}
           <div className="w-full max-w-3xl text-center pt-4 mb-2">
             <p className="text-2xl tracking-tight">
               A free Frontend Client for watching Movies. Search for your
@@ -106,7 +105,7 @@ const Home = () => {
       </div>
       <div
         ref={resultsRef}
-        className=" flex flex-wrap gap-5 justify-center items-center mx-20"
+        className=" flex flex-wrap gap-5 justify-center pb-10 items-center mx-20"
       >
         {Error && (
           <div className="w-full max-w-3xl text-center pt-4 mb-2">

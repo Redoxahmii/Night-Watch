@@ -1,6 +1,5 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import Nav from "./components/Navbar";
 import PopularMovies from "./pages/Movies/PopularMovies";
 import MovieDetails from "./pages/Movies/MovieDetail";
 import TopRatedMovies from "./pages/Movies/TopRatedMovies";
@@ -9,6 +8,7 @@ import ShowsDetail from "./pages/Shows/ShowsDetail";
 import TopRatedShows from "./pages/Shows/TopRatedShows";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Nav from "./components/Navbar";
 const App = () => {
   return (
     <>
