@@ -1,25 +1,15 @@
 /* eslint-disable no-undef */
+const { nextui } = require("@nextui-org/react");
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
-    extend: {
-      fontFamily: {
-        sans: ["Inter", "sans-serif"],
-      },
-    },
+    extend: {},
   },
-  plugins: [require("daisyui")],
-  daisyui: {
-    themes: [
-      "black",
-      {
-        black: {
-          ...require("daisyui/src/theming/themes")["[data-theme=black]"],
-          // primary: "#a855f7",
-          // secondary: "#3b82f6",
-        },
-      },
-    ],
-  },
+  darkMode: "class",
+  plugins: [nextui(), require("tailwindcss-animated")],
 };

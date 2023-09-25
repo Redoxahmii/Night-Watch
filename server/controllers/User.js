@@ -6,21 +6,31 @@ export const Signup = async (req, res, next) => {
   try {
     const { email, password, username } = req.body;
     const existingUser = await User.findOne({ email });
+
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
-    const newUser = await User.create({ email, password, username });
-    const token = createSecretToken(User._id);
-    res.cookie("token", token, {
-      withCredentials: true,
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-    });
-    res
-      .status(200)
-      .json({ message: "User created  successfully", success: true, newUser });
-    next();
+
+    try {
+      const newUser = await User.create({ email, password, username });
+      const token = createSecretToken(User._id);
+      res.cookie("token", token, {
+        withCredentials: true,
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+      });
+      res
+        .status(200)
+        .json({ message: "User created successfully", success: true, newUser });
+      next();
+    } catch (error) {
+      // Handle duplicate key error for username
+      if (error.code === 11000 && error.keyPattern.username === 1) {
+        return res.status(400).json({ message: "Username is already taken" });
+      }
+      throw error; // Rethrow other errors
+    }
   } catch (error) {
     console.log(error);
   }

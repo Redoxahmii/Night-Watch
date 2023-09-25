@@ -8,11 +8,11 @@ export const PageContext = createContext();
 export const PageProvider = ({ children }) => {
   const [popularMoviePage, setPopularMoviePage] = useState(1);
   const [ratedMoviePage, setRatedMoviePage] = useState(1);
-
   const [popularTvPage, setPopularTvPage] = useState(1);
   const [ratedTvPage, setRatedTvPage] = useState(1);
   const [cookies, setCookie, removeCookie] = useCookies(["token"]); // Add setCookie
   const [username, setUsername] = useState(null);
+  const [homeResponse, setHomeResponse] = useState([]);
 
   useEffect(() => {
     const verifyCookie = async () => {
@@ -60,6 +60,8 @@ export const PageProvider = ({ children }) => {
   const value = {
     popularMoviePage,
     logout,
+    homeResponse,
+    setHomeResponse,
     username,
     setPopularMoviePage,
     ratedMoviePage,

@@ -1,33 +1,71 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Card from "../components/Card";
+import { Button, Input } from "@nextui-org/react";
+import { Search } from "lucide-react";
+import { PageContext } from "../utils/PageContext";
+import CardSkeleton from "../components/CardSkeleton";
+
 const Home = () => {
+  const { homeResponse, setHomeResponse } = useContext(PageContext);
   const [searchTerm, setSearchTerm] = useState("");
-  const [Response, setResponse] = useState([]);
+  const [Buttonloading, setButtonLoading] = useState(false);
+  const [homeLoading, setHomeLoading] = useState(false);
+  const [InputDisabled, setInputDisabled] = useState(false);
+  const [searchInputError, setsearchInputError] = useState("");
   const [Error, setError] = useState("");
+  const resultsRef = useRef(null);
+  useEffect(() => {
+    const handleSubmit = async () => {
+      setHomeLoading(true);
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/api/movie/search?query=spiderman`
+        ).then((response) => response.json());
+        if (response.error) {
+          console.log(response.error);
+        } else {
+          setHomeResponse(response);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setHomeLoading(false);
+      }
+    };
+    handleSubmit();
+  }, [setHomeResponse]);
 
   const handleSubmit = async () => {
+    setButtonLoading(true);
     try {
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/api/movie/search?query=` +
           searchTerm
       ).then((response) => response.json());
       if (response.error) {
-        setError(response.error); // Set a specific error message from the server.
+        setInputDisabled(true); // Disable the input field.
+        setsearchInputError(response.error); // Set a specific error message from the server.
       } else {
-        setResponse(response);
+        setHomeResponse(response);
+        setInputDisabled(false);
+        setsearchInputError("");
+        resultsRef.current.scrollIntoView({
+          behavior: "smooth",
+        });
       }
+      setButtonLoading(false);
     } catch (error) {
+      setButtonLoading(false);
       setError("An error occurred. Please try again later."); // Set a generic error message for network issues.
     }
   };
 
   return (
     <>
-      <div className="w-screen h-[80vh] flex items-center justify-center">
-        <div className=" flex flex-col items-center justify-center gap-4">
-          {/* <div className="bg-gradient-to-r from-secondary to-primary bg-clip-text h-[85px]"> */}
-          <h1 className="text-7xl tracking-tighter text-base-content">
+      <div className="w-screen h-[91vh] flex items-center justify-center pb-20">
+        <div className=" flex  flex-col items-center justify-center gap-4">
+          <h1 className="text-7xl tracking-tighter text-secondary-700">
             Welcome to Night Watch
           </h1>
           {/* </div> */}
@@ -37,29 +75,53 @@ const Home = () => {
               favourite movies and watch them for free!
             </p>
           </div>
-          <input
+          <Input
             type="text"
-            placeholder="Search for movies"
-            className="input input-bordered w-96 input-primary"
+            variant="flat"
+            isInvalid={InputDisabled}
+            isRequired
+            errorMessage={searchInputError}
+            size="md"
+            isClearable
+            className="w-96"
+            placeholder="Search for movies..."
             onChange={(e) => setSearchTerm(e.target.value)}
+            startContent={
+              <Search
+                className={InputDisabled ? "text-red-600" : " text-default-400"}
+              />
+            }
           />
-          <button
-            className=" btn btn-primary btn-wide rounded-xl normal-case"
-            onClick={handleSubmit}
+          <Button
+            isDisabled={Buttonloading}
+            isLoading={Buttonloading}
+            className="px-10"
+            color="secondary"
+            variant="shadow"
+            onPress={handleSubmit}
           >
-            Search
-          </button>
+            {Buttonloading ? "Searching..." : "Search"}
+          </Button>
         </div>
       </div>
-      {Error ? (
-        <p className=" alert alert-error">{Error}</p>
-      ) : (
-        <div className="flex flex-wrap pl-20 gap-5">
-          {Response.map((movie, index) => (
-            <Card key={index} Data={movie}></Card>
-          ))}
-        </div>
-      )}
+      <div
+        ref={resultsRef}
+        className=" flex flex-wrap gap-5 justify-center items-center mx-20"
+      >
+        {Error && (
+          <div className="w-full max-w-3xl text-center pt-4 mb-2">
+            <p className="text-2xl tracking-tight text-danger">{Error}</p>
+          </div>
+        )}
+
+        {homeLoading
+          ? Array.from({ length: 20 }, (_, index) => (
+              <CardSkeleton key={index} />
+            ))
+          : homeResponse.map((movie, index) => {
+              return <Card key={index} Data={movie} />;
+            })}
+      </div>
     </>
   );
 };

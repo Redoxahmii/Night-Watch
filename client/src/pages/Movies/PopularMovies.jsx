@@ -1,8 +1,8 @@
 import { useState, useEffect, useContext } from "react";
 import Card from "../../components/Card";
 import axios from "axios";
-import Loader from "../../components/Loader";
 import { PageContext } from "../../utils/PageContext";
+import CardSkeleton from "../../components/CardSkeleton";
 const PopularMovies = () => {
   const { popularMoviePage, setPopularMoviePage } = useContext(PageContext);
   const [movies, setMovies] = useState([]);
@@ -55,7 +55,11 @@ const PopularMovies = () => {
         </button>
       </div>
       {loading ? (
-        <Loader />
+        <div className="flex flex-wrap gap-16 pl-5 w-screen">
+          {Array.from({ length: 20 }).map((_, index) => (
+            <CardSkeleton key={index}></CardSkeleton>
+          ))}
+        </div>
       ) : error ? (
         <div className="alert alert-error">
           <svg

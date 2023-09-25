@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import Navbar from "./components/Navbar";
+import Nav from "./components/Navbar";
 import PopularMovies from "./pages/Movies/PopularMovies";
 import MovieDetails from "./pages/Movies/MovieDetail";
 import TopRatedMovies from "./pages/Movies/TopRatedMovies";
@@ -12,7 +12,7 @@ import Signup from "./pages/Signup";
 const App = () => {
   return (
     <>
-      <Navbar />
+      <Nav />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

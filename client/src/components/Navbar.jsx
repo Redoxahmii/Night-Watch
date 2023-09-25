@@ -1,108 +1,181 @@
-import { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  Button,
+  Divider,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  Link,
+  DropdownItem,
+  Avatar,
+  DropdownSection,
+  NavbarMenuToggle,
+  NavbarMenu,
+  Accordion,
+  AccordionItem,
+} from "@nextui-org/react";
+import me from "../assets/me.jpg";
 import { PageContext } from "../utils/PageContext";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { LogIn, LogOut, User, UserPlus } from "lucide-react";
 
-const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const { logout, username } = useContext(PageContext);
-  const handleScroll = () => {
-    const offset = window.scrollY;
-    if (offset > 200) {
-      setScrolled(true);
-    } else {
-      setScrolled(false);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  let navbarClasses = ["navbar", "fixed", "top-0", "z-10", "rounded-xl"];
-  if (scrolled) {
-    navbarClasses.push("bg-base-300/70");
-  } else {
-    navbarClasses.push("bg-base-300");
-  }
+const Nav = () => {
+  const { username, logout } = useContext(PageContext);
+  const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className={navbarClasses.join(" ")}>
-      <div className="flex-1">
-        <Link to="/" className="btn btn-ghost normal-case text-xl">
-          Night Watch
-        </Link>
-      </div>
-      <div className="flex-none">
-        <ul className="menu menu-horizontal justify-between items-center px-1">
-          <li>
-            <details>
-              <summary>Movies</summary>
-              <ul className="p-2 bg-base-100 w-32">
-                <li>
-                  <Link to="/movies/popular">Popular</Link>
-                </li>
-                <li>
-                  <Link to="/movies/toprated">Top Rated</Link>
-                </li>
-              </ul>
-            </details>
-          </li>
-          <li>
-            <details>
-              <summary>Shows</summary>
-              <ul className=" bg-base-100 p-2 w-32">
-                <li>
-                  <Link to="/tvshows/popular">Popular</Link>
-                </li>
-                <li>
-                  <Link to="/tvshows/toprated">Top Rated</Link>
-                </li>
-              </ul>
-            </details>
-          </li>
-          <div className="dropdown dropdown-end">
-            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-              <div className="mask mask-squircle w-8 h-8">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
+    <>
+      <Navbar onMenuOpenChange={setIsMenuOpen}>
+        <NavbarMenuToggle
+          className="sm:hidden"
+          aria-label={isMenuOpen ? "closemenu" : "open menu"}
+        />
+        <NavbarBrand>
+          <Button
+            onClick={() => navigate("/")}
+            variant="light"
+            color="secondary"
+            className=" font-semibold text-large"
+          >
+            NightWatch
+          </Button>
+        </NavbarBrand>
+        <NavbarContent className="hidden sm:flex gap-4" justify="center">
+          <NavbarItem>
+            <Dropdown>
+              <DropdownTrigger>
+                <Link isBlock size="md" color="foreground">
+                  Movies
+                </Link>
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="Movies Actions"
+                color="secondary"
+                variant="light"
+              >
+                <DropdownSection title="Categories">
+                  <DropdownItem as={RouterLink} to="/movies/popular">
+                    Popular
+                  </DropdownItem>
+                  <DropdownItem as={RouterLink} to="/movies/toprated">
+                    Top Rated
+                  </DropdownItem>
+                </DropdownSection>
+              </DropdownMenu>
+            </Dropdown>
+          </NavbarItem>
+          <NavbarItem>
+            <Dropdown>
+              <DropdownTrigger>
+                <Link isBlock size="md" color="foreground">
+                  TV Shows
+                </Link>
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="TvShows"
+                color="secondary"
+                variant="light"
+              >
+                {" "}
+                <DropdownSection title="Categories">
+                  <DropdownItem as={RouterLink} to="/tvshows/popular">
+                    Popular
+                  </DropdownItem>
+                  <DropdownItem as={RouterLink} to="/tvshows/toprated">
+                    Top Rated
+                  </DropdownItem>
+                </DropdownSection>
+              </DropdownMenu>
+            </Dropdown>
+          </NavbarItem>
+        </NavbarContent>
+        <NavbarContent className=" ml-2" as="div" justify="end">
+          <NavbarItem>
+            <Dropdown placement="bottom-end">
+              <DropdownTrigger>
+                <Avatar
+                  isBordered
+                  as="button"
+                  className="transition-transform"
+                  color="secondary"
+                  name="User"
+                  size="sm"
+                  src={me}
+                ></Avatar>
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="User Actions"
+                color="secondary"
+                variant="light"
+              >
+                <DropdownItem
+                  startContent={<LogIn size={18} />}
+                  as={RouterLink}
+                  to="/login"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-              </div>
-            </label>
-            <ul
-              tabIndex={0}
-              className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
-            >
-              <li>
-                <Link to="/login">Login</Link>
-              </li>
-              <li>
-                <Link to="/signup">Signup</Link>
-              </li>
-              {username && <li>Welcome {username}</li>}
-              {username && (
-                <li>
-                  <button onClick={() => logout()}>Logout</button>
-                </li>
-              )}
-            </ul>
-          </div>
-        </ul>
-      </div>
-    </div>
+                  Login
+                </DropdownItem>
+                <DropdownItem
+                  startContent={<UserPlus size={18}></UserPlus>}
+                  showDivider={username ? true : false}
+                  as={RouterLink}
+                  to="/signup"
+                >
+                  Signup
+                </DropdownItem>
+                {username && (
+                  <DropdownSection title="User">
+                    <DropdownItem
+                      className="pointer-events-none"
+                      startContent={<User size={18} />}
+                      textValue={username}
+                    >
+                      <p className=" font-bold">Signed in as {username}</p>
+                    </DropdownItem>
+                    <DropdownItem
+                      textValue="Logout"
+                      startContent={<LogOut size={18} />}
+                      onPress={() => logout()}
+                    >
+                      Logout
+                    </DropdownItem>
+                  </DropdownSection>
+                )}
+              </DropdownMenu>
+            </Dropdown>
+          </NavbarItem>
+        </NavbarContent>
+        <NavbarMenuContent />
+      </Navbar>
+      <Divider></Divider>
+    </>
   );
 };
 
-export default Navbar;
+export default Nav;
+
+const NavbarMenuContent = () => {
+  return (
+    <NavbarMenu>
+      <Accordion>
+        <AccordionItem title="Movies">
+          <div className=" flex flex-col gap-2">
+            <RouterLink to="/movies/popular">Popular</RouterLink>
+            <RouterLink to="/movies/toprated">Top Rated</RouterLink>
+          </div>
+        </AccordionItem>
+        <AccordionItem title="Shows">
+          <div className=" flex flex-col gap-2">
+            <RouterLink to="/tvshows/popular">Popular</RouterLink>
+            <RouterLink to="/tvshows/toprated">Top Rated</RouterLink>
+          </div>
+        </AccordionItem>
+      </Accordion>
+    </NavbarMenu>
+  );
+};

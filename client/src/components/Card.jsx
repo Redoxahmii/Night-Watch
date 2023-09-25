@@ -1,34 +1,110 @@
 /* eslint-disable react/prop-types */
-import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import {
+  Card as CardNext,
+  CardFooter,
+  Image,
+  Button,
+  useDisclosure,
+  ModalFooter,
+  ModalBody,
+  ModalHeader,
+  ModalContent,
+  Modal,
+} from "@nextui-org/react";
+import YouTube from "react-youtube";
+import { Play, Star } from "lucide-react";
 const Card = ({ Data }) => {
-  const { title, navigateLink, posterPath, overview, vote_average } = Data;
-
+  const {
+    title,
+    navigateLink,
+    posterPath,
+    overview,
+    vote_average,
+    trailerUrl,
+  } = Data;
+  const navigate = useNavigate();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
-    <div className="relative w-full max-w-md bg-primary-content rounded-xl shadow-xl">
-      <Link to={navigateLink}>
-        <div className="group">
-          <div
-            className="bg-cover rounded-xl bg-center h-[28rem] transition-all duration-300 ease-in-out transform scale-100 group-hover:scale-105"
-            style={{
-              backgroundImage: posterPath ? `url(${posterPath})` : "none",
-            }}
-          ></div>
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-4 bg-opacity-90 backdrop-blur transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100">
-            <h2 className="text-2xl text-center text-white font-semibold">
-              {title}
-            </h2>
-            <p className="text-base-content/70 text-center text-white">
-              {overview}
-            </p>
-            <p className="text-white mt-2">Rating: {vote_average}</p>
-            <button className="btn rounded-xl normal-case mt-2">
-              Watch Now
-            </button>
-          </div>
-        </div>
-      </Link>
-    </div>
+    <>
+      <CardNext
+        isPressable
+        onPress={onOpen}
+        isFooterBlurred
+        radius="lg"
+        className="border-none group"
+      >
+        <Image
+          src={posterPath}
+          alt={title}
+          className="object-cover"
+          height={300}
+          width={300}
+        />
+        <CardFooter
+          as="div"
+          className="justify-between bg-black/50 group-hover:block hidden transition-transform animate-fade animate-duration-500 before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10"
+        >
+          <p className="text-md font-semibold">{title}</p>
+          <p className="text-sm text-white/80 mt-2">
+            {overview.substring(0, 150)}...
+          </p>
+        </CardFooter>
+        <Modal
+          isOpen={isOpen}
+          size="5xl"
+          placement="center"
+          classNames={{
+            base: "bg-black/70",
+          }}
+          backdrop="blur"
+          onOpenChange={onOpenChange}
+        >
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1"></ModalHeader>
+                <ModalBody as="div">
+                  <div className="flex justify-center gap-10 items-center">
+                    <div className=" flex flex-col gap-2">
+                      <h1 className="font-bold text-2xl">{title}</h1>
+                      <p className="text-white/70 text-sm">{overview}</p>
+                      <div className="flex items-center gap-2">
+                        <Star
+                          size={20}
+                          fill="currentColor"
+                          className="text-yellow-400"
+                        ></Star>
+                        <p className="text-white/70 text-sm">{vote_average}</p>
+                      </div>
+                    </div>
+                    <div className=" lg:flex hidden rounded-xl">
+                      <YouTube
+                        videoId={trailerUrl}
+                        iframeClassName=" rounded-xl"
+                      />
+                    </div>
+                  </div>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                  <Button
+                    color="primary"
+                    variant="shadow"
+                    startContent={<Play size={15}></Play>}
+                    onPress={() => navigate(navigateLink)}
+                  >
+                    Watch
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      </CardNext>
+    </>
   );
 };
 

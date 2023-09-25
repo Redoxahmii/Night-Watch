@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../components/Loader";
 import ShowError from "./ShowError";
+import { Button } from "@nextui-org/react";
 
 const ShowsDetail = () => {
   const { showId, season, episode } = useParams();
@@ -115,12 +116,12 @@ const ShowsDetail = () => {
           <ul className="dropdown-content z-[1] flex gap-2  shadow bg-base-300 menu menu-horizontal w-[500px] ">
             {seasons.map((season, seasonIndex) => (
               <li key={seasonIndex}>
-                <button
-                  disabled={buttonReload}
+                <Button
+                  isDisabled={buttonReload}
                   onClick={() => setSelectedSeasonIndex(seasonIndex)}
                 >
                   {season.seasonName}
-                </button>
+                </Button>
               </li>
             ))}
           </ul>
@@ -129,9 +130,9 @@ const ShowsDetail = () => {
           {seasons[selectedSeasonIndex].episodeCount.map(
             (episode, episodeIndex) => (
               <div key={episodeIndex} className="p-2">
-                <button
-                  disabled={buttonReload}
-                  onClick={() => {
+                <Button
+                  isDisabled={buttonReload}
+                  onPress={() => {
                     setSelectedSeason(
                       seasons[selectedSeasonIndex].seasonNumber
                     );
@@ -142,7 +143,7 @@ const ShowsDetail = () => {
                   }}
                 >
                   Episode {episodeIndex + 1}
-                </button>
+                </Button>
               </div>
             )
           )}

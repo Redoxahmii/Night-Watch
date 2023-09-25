@@ -2,16 +2,29 @@ import { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { PageContext } from "../utils/PageContext";
+import {
+  Button,
+  Card,
+  Link,
+  CardBody,
+  CardHeader,
+  Input,
+} from "@nextui-org/react";
+import { Check, Eye, EyeOff, LogIn, XCircle } from "lucide-react";
+import { Link as RouterLink } from "react-router-dom";
 
 const Login = () => {
   const { setCookie } = useContext(PageContext);
   const navigate = useNavigate();
+  const [Loading, setLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [input, setInput] = useState({
     email: "",
     password: "",
   });
+  const toggleVisibility = () => setIsVisible(!isVisible);
 
   const handleChange = (e) => {
     setInput({
@@ -22,6 +35,8 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
     try {
       const { data } = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/api/user/login`,
@@ -42,8 +57,10 @@ const Login = () => {
       setTimeout(() => {
         navigate("/");
       }, 2000);
+      setLoading(false);
     } catch (error) {
       setError(error.response.data.message);
+      setLoading(false);
     }
     setInput({
       email: "",
@@ -51,78 +68,80 @@ const Login = () => {
     });
   };
   return (
-    <div className=" w-screen items-center justify-center h-screen flex">
-      <div className="w-full flex-col max-w-lg bg-base-300 flex items-center justify-center rounded-xl p-14">
-        <h1 className="text-4xl">Login</h1>
-        <form
-          action="submit"
-          className="flex mt-5 flex-col"
-          onSubmit={handleSubmit}
-        >
-          <label className="label label-text" htmlFor="Email">
-            Email
-          </label>
-          <input
-            type="text"
-            className=" input input-primary "
-            name="email"
-            onChange={handleChange}
-          />
-          <label className="label label-text" htmlFor="Password">
-            Password
-          </label>
-          <input
-            type="password"
-            className="input input-primary"
-            name="password"
-            onChange={handleChange}
-          />
-          <div className=" items-center justify-center flex mt-10">
-            <button
-              className="btn btn-primary normal-case rounded-xl"
+    <div className=" w-screen items-center justify-center h-[90vh] flex">
+      <Card className=" flex items-center justify-center mt-10 p-10">
+        <CardHeader className=" justify-center items-center">
+          <h1 className="text-3xl font-semibold">Login</h1>
+        </CardHeader>
+        <CardBody>
+          <form
+            action="submit"
+            className="flex gap-4 flex-col"
+            onSubmit={handleSubmit}
+          >
+            <Input
+              isRequired
+              label="Email"
+              type="email"
+              isClearable
+              description="We'll never share your email with anyone else."
+              size="sm"
+              name="email"
+              onChange={handleChange}
+            />
+
+            <Input
+              label="Password"
+              size="sm"
+              isRequired
+              endContent={
+                <button
+                  className="focus:outline-none"
+                  type="button"
+                  onClick={toggleVisibility}
+                >
+                  {isVisible ? (
+                    <Eye size={18} className=" text-default-400" />
+                  ) : (
+                    <EyeOff size={18} className=" text-default-400" />
+                  )}
+                </button>
+              }
+              type={isVisible ? "text" : "password"}
+              name="password"
+              onChange={handleChange}
+            />
+            <p className="text-center text-small">
+              Need to create an account?{" "}
+              <Link as={RouterLink} to="/signup" size="sm">
+                Sign up
+              </Link>
+            </p>
+            <Button
+              isDisabled={Loading}
+              isLoading={Loading}
+              color="secondary"
+              variant="shadow"
+              startContent={Loading ? "" : <LogIn size={18} />}
               type="submit"
             >
-              Submit
-            </button>
-          </div>
-        </form>
+              {Loading ? "Logging in..." : "Login"}
+            </Button>
+          </form>
+        </CardBody>
         {success && (
-          <div className="alert alert-success mt-5">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="stroke-current shrink-0 h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>{success}</span>
+          <div className="animate-fade rounded-xl bg-success/70 p-4 items-center justify-center flex gap-1">
+            <Check size={18} />
+            <span className="text-sm">{success}</span>
           </div>
         )}
         {error && (
-          <div className="alert alert-error mt-5">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="stroke-current shrink-0 h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>{error}</span>
+          <div className="animate-fade rounded-xl bg-danger p-4 items-center justify-center flex gap-1">
+            <XCircle size={18} />
+            <span className="text-sm">{error}</span>
           </div>
         )}
-      </div>
+      </Card>
     </div>
   );
 };
