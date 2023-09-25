@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import helmet from "helmet";
+import helmet from "helmet/index.cjs";
 import MovieRoutes from "./routes/Movie.js";
 import TvShowRoutes from "./routes/Shows.js";
 import UserRoutes from "./routes/User.js";
