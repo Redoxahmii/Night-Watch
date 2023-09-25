@@ -6,7 +6,6 @@ import MovieRoutes from "./routes/Movie.js";
 import TvShowRoutes from "./routes/Shows.js";
 import UserRoutes from "./routes/User.js";
 import cookieParser from "cookie-parser";
-import helmet from "helmet/index.cjs";
 
 dotenv.config();
 const app = express();
@@ -25,8 +24,6 @@ app.use(
 );
 
 app.use(cookieParser());
-app.use(helmet());
-app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 // Routes
 
