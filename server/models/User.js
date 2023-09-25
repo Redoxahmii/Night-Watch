@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import uniqueValidator from "mongoose-unique-validator";
 
 const UserSchema = new mongoose.Schema({
   email: {
@@ -36,6 +37,8 @@ UserSchema.pre("save", async function (next) {
   this.password = hashedPassword;
   next();
 });
+
+UserSchema.plugin(uniqueValidator, { message: "is already taken." });
 
 const User = mongoose.model("User", UserSchema);
 
