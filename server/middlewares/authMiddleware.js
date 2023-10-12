@@ -14,7 +14,11 @@ export const userVerification = async (req, res) => {
     } else {
       const user = await User.findById(data.id);
       if (user) {
-        return res.json({ status: true, username: user.username });
+        return res.json({
+          status: true,
+          username: user.username,
+          id: user._id,
+        });
       } else {
         return res.json({ status: false, message: "User not found" });
       }

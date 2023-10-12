@@ -53,7 +53,12 @@ const Nav = () => {
         <NavbarItem>
           <Dropdown>
             <DropdownTrigger>
-              <Link isBlock size="md" color="foreground">
+              <Link
+                isBlock
+                size="md"
+                color="foreground"
+                className="cursor-pointer"
+              >
                 Movies
               </Link>
             </DropdownTrigger>
@@ -76,7 +81,12 @@ const Nav = () => {
         <NavbarItem>
           <Dropdown>
             <DropdownTrigger>
-              <Link isBlock size="md" color="foreground">
+              <Link
+                isBlock
+                size="md"
+                color="foreground"
+                className="cursor-pointer"
+              >
                 TV Shows
               </Link>
             </DropdownTrigger>

@@ -80,3 +80,24 @@ export const Logout = async (req, res) => {
     console.log(error);
   }
 };
+
+export const watchList = async (req, res) => {
+  try {
+    const { movieId, userId } = req.body;
+    const user = await User.findById(userId);
+
+    if (user.watchList.includes(movieId)) {
+      return res.status(400).json({ message: "Movie already added" });
+    }
+
+    // Ensure uniqueness by only adding the movieId if it's not already in the watchList.
+    user.watchList = [...new Set([...user.watchList, movieId])];
+    await user.save();
+
+    res
+      .status(200)
+      .json({ message: "Movie added successfully", success: true });
+  } catch (error) {
+    console.log(error);
+  }
+};

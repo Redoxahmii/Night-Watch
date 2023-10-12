@@ -78,7 +78,7 @@ const Card = ({ Data }) => {
                         <p className="text-white/70 text-sm">{vote_average}</p>
                       </div>
                     </div>
-                    <div className=" lg:flex hidden rounded-xl">
+                    <div className="lg:flex hidden rounded-xl">
                       <YouTube
                         videoId={trailerUrl}
                         iframeClassName=" rounded-xl"

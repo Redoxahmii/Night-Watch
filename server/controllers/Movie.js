@@ -115,7 +115,7 @@ export const searchMovies = async (req, res) => {
       return res.status(400).json({ error: "Please enter a Search term" });
     }
     const tmdbApiKey = process.env.TMDB_API_KEY;
-    const tmdbUrl = `https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&query=${query}`;
+    const tmdbUrl = `https://api.themoviedb.org/3/search/movie?include_adult=true&language=en-US&api_key=${tmdbApiKey}&query=${query}`;
     const tmdbResponse = await axios.get(tmdbUrl);
     const movies = tmdbResponse.data.results;
     const baseUrl = "https://image.tmdb.org/t/p/w500";
@@ -183,6 +183,159 @@ export const searchMovies = async (req, res) => {
       })
     );
     res.json(moviesWithEmbedUrls);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch movie. Try again later." });
+  }
+};
+
+export const searchMovieAndShows = async (req, res) => {
+  try {
+    const { query } = req.query;
+    if (!query) {
+      return res.status(400).json({ error: "Please enter a Search term" });
+    }
+    const tmdbApiKey = process.env.TMDB_API_KEY;
+    const tvUrl = `https://api.themoviedb.org/3/search/tv?include_adult=true&language=en-US&api_key=${tmdbApiKey}&query=${query}`;
+    const movieUrl = `https://api.themoviedb.org/3/search/movie?include_adult=true&language=en-US&api_key=${tmdbApiKey}&query=${query}`;
+    const [tvResponse, movieResponse] = await Promise.all([
+      axios.get(tvUrl),
+      axios.get(movieUrl),
+    ]);
+    const movies = movieResponse.data.results;
+    const tvShows = tvResponse.data.results;
+    const baseUrl = "https://image.tmdb.org/t/p/w500";
+
+    // Function to fetch trailer URL for a movie
+    const fetchTrailerUrl = async (movieId) => {
+      const trailerResponse = await axios.get(
+        `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${tmdbApiKey}`
+      );
+
+      // Filter for trailers based on the "type" field
+      const trailers = trailerResponse.data.results.filter(
+        (video) => video.type === "Trailer"
+      );
+
+      // Check if there are trailers available for the movie
+      if (trailers.length > 0) {
+        const trailerKey = trailers[0].key; // Assuming you want the first trailer in the list
+        return `${trailerKey}`;
+      } else {
+        return ""; // Return an empty string if no trailers are found
+      }
+    };
+    const fetchTrailerUrlTV = async (showId) => {
+      const trailerResponse = await axios.get(
+        `https://api.themoviedb.org/3/tv/${showId}/videos?api_key=${tmdbApiKey}`
+      );
+
+      // Filter for trailers based on the "type" field
+      const trailers = trailerResponse.data.results.filter(
+        (video) => video.type === "Trailer"
+      );
+
+      // Check if there are trailers available for the movie
+      if (trailers.length > 0) {
+        const trailerKey = trailers[0].key; // Assuming you want the first trailer in the list
+        return `${trailerKey}`;
+      } else {
+        return ""; // Return an empty string if no trailers are found
+      }
+    };
+
+    const moviesWithEmbedUrls = await Promise.all(
+      movies.map(async (movie) => {
+        const navigateLink = `/movies/${movie.id}`;
+        const posterPath = `${baseUrl}${movie.poster_path}`;
+        const embedUrl = `https://vidsrc.to/embed/movie/${movie.id}`;
+
+        // Check if the poster image exists
+        try {
+          const imageExists = await checkImageExists(posterPath);
+          if (imageExists) {
+            // Fetch trailer URL
+            const trailerUrl = await fetchTrailerUrl(movie.id);
+
+            return {
+              ...movie,
+              navigateLink,
+              posterPath,
+              embedUrl,
+              trailerUrl, // Add the trailer URL to the movie data
+            };
+          } else {
+            // If the image doesn't exist, return an empty posterPath and trailerUrl
+            return {
+              ...movie,
+              navigateLink,
+              posterPath: "",
+              embedUrl,
+              trailerUrl: "",
+            };
+          }
+        } catch (error) {
+          console.error("Error checking image existence:", error);
+          return {
+            ...movie,
+            navigateLink,
+            posterPath: "",
+            embedUrl,
+            trailerUrl: "",
+          };
+        }
+      })
+    );
+    const tvShowsWithEmbedUrls = await Promise.all(
+      tvShows.map(async (movie) => {
+        const navigateLink = `/tvshows/${movie.id}/1/1`;
+        const posterPath = `${baseUrl}${movie.poster_path}`;
+        const embedUrl = `https://vidsrc.to/embed/tv/${movie.id}`;
+        const { name, overview, vote_average } = movie;
+        const title = name;
+        // Check if the poster image exists
+        try {
+          const imageExists = await checkImageExists(posterPath);
+          if (imageExists) {
+            // Fetch trailer URL
+            const trailerUrl = await fetchTrailerUrlTV(movie.id);
+
+            return {
+              ...movie,
+              title,
+              navigateLink,
+              posterPath,
+              embedUrl,
+              trailerUrl, // Add the trailer URL to the movie data
+            };
+          } else {
+            // If the image doesn't exist, return an empty posterPath and trailerUrl
+            return {
+              ...movie,
+              title,
+              navigateLink,
+              posterPath: "",
+              embedUrl,
+              trailerUrl: "",
+            };
+          }
+        } catch (error) {
+          console.error("Error checking image existence:", error);
+          return {
+            ...movie,
+            title,
+            navigateLink,
+            posterPath: "",
+            embedUrl,
+            trailerUrl: "",
+          };
+        }
+      })
+    );
+
+    res.json({
+      tvShows: tvShowsWithEmbedUrls,
+      movies: moviesWithEmbedUrls,
+    });
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch movie. Try again later." });
   }

@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../components/Loader";
 import ShowError from "./ShowError";
 import { Button } from "@nextui-org/react";
+import axios from "axios";
+import { PageContext } from "../../utils/PageContext";
 
 const ShowsDetail = () => {
   const { showId, season, episode } = useParams();
@@ -15,6 +17,7 @@ const ShowsDetail = () => {
   const [genres, setGenres] = useState([]);
   const navigate = useNavigate();
   const [selectedSeasonIndex, setSelectedSeasonIndex] = useState(0);
+  const { userData } = useContext(PageContext);
 
   useEffect(() => {
     const fetchShows = async () => {
@@ -40,8 +43,26 @@ const ShowsDetail = () => {
         setLoading(false);
       }
     };
+    const StoreMovieList = async () => {
+      try {
+        if (userData.status) {
+          await axios.post(
+            `${import.meta.env.VITE_SERVER_URL}/api/user/watchList`,
+            {
+              movieId: showId,
+              userId: userData.id,
+            }
+          );
+        } else {
+          return;
+        }
+      } catch (error) {
+        return;
+      }
+    };
+    StoreMovieList();
     fetchShows();
-  }, [selectedEpisode, selectedSeason, showId, selectedSeasonIndex]);
+  }, [selectedEpisode, selectedSeason, showId, selectedSeasonIndex, userData]);
 
   if (error) {
     return <ShowError />;

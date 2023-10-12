@@ -13,6 +13,7 @@ export const PageProvider = ({ children }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]); // Add setCookie
   const [username, setUsername] = useState(null);
   const [homeResponse, setHomeResponse] = useState([]);
+  const [userData, setUserData] = useState({});
 
   useEffect(() => {
     const verifyCookie = async () => {
@@ -23,6 +24,7 @@ export const PageProvider = ({ children }) => {
             {},
             { withCredentials: true }
           );
+          setUserData(data);
           const { status, username } = data;
           if (status) {
             setUsername(username);
@@ -60,6 +62,7 @@ export const PageProvider = ({ children }) => {
   const value = {
     popularMoviePage,
     logout,
+    userData,
     homeResponse,
     setHomeResponse,
     username,
@@ -69,6 +72,7 @@ export const PageProvider = ({ children }) => {
     popularTvPage,
     setPopularTvPage,
     setCookie,
+    cookies,
     ratedTvPage,
     setRatedTvPage,
   };

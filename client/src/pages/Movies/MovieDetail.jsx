@@ -1,12 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Loader from "../../components/Loader";
 import { useParams } from "react-router-dom";
 import MovieError from "./MovieError";
 import { Image } from "@nextui-org/react";
 import { Rocket, Star } from "lucide-react";
+import { PageContext } from "../../utils/PageContext";
+import axios from "axios";
 
 const MovieDetails = () => {
   const { movieId } = useParams();
+  const { userData } = useContext(PageContext);
   const [movieDetails, setMovieDetails] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -30,8 +33,27 @@ const MovieDetails = () => {
       }
     }
 
+    const StoreMovieList = async () => {
+      try {
+        if (userData.status) {
+          await axios.post(
+            `${import.meta.env.VITE_SERVER_URL}/api/user/watchList`,
+            {
+              movieId: movieId,
+              userId: userData.id,
+            }
+          );
+        } else {
+          return;
+        }
+      } catch (error) {
+        return;
+      }
+    };
+
+    StoreMovieList();
     fetchMovieDetails();
-  }, [movieId]);
+  }, [movieId, userData]);
 
   if (error) {
     return <MovieError />;

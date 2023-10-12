@@ -20,7 +20,9 @@ const Home = () => {
       setHomeLoading(true);
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/api/movie/search?query=spiderman`
+          `${
+            import.meta.env.VITE_SERVER_URL
+          }/api/movie/search/shows?query=spiderman`
         ).then((response) => response.json());
         if (response.error) {
           console.log(response.error);
@@ -40,7 +42,7 @@ const Home = () => {
     setButtonLoading(true);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/movie/search?query=` +
+        `${import.meta.env.VITE_SERVER_URL}/api/movie/search/shows?query=` +
           searchTerm
       ).then((response) => response.json());
       if (response.error) {
@@ -65,11 +67,11 @@ const Home = () => {
     <>
       <div className="w-screen h-[91vh] flex items-center justify-center ">
         <div className=" flex  flex-col items-center justify-center gap-4">
-          <h1 className="text-7xl tracking-tighter text-secondary-700">
+          <h1 className="lg:text-7xl text-4xl tracking-tighter text-secondary-700">
             Welcome to Night Watch
           </h1>
           <div className="w-full max-w-3xl text-center pt-4 mb-2">
-            <p className="text-2xl tracking-tight">
+            <p className="lg:text-2xl tracking-tight text-lg">
               A free Frontend Client for watching Movies. Search for your
               favourite movies and watch them for free!
             </p>
@@ -83,7 +85,7 @@ const Home = () => {
             size="md"
             isClearable
             className="w-96"
-            placeholder="Search for movies..."
+            placeholder="Search for media..."
             onChange={(e) => setSearchTerm(e.target.value)}
             startContent={
               <Search
@@ -112,14 +114,34 @@ const Home = () => {
             <p className="text-2xl tracking-tight text-danger">{Error}</p>
           </div>
         )}
-
-        {homeLoading
-          ? Array.from({ length: 20 }, (_, index) => (
-              <CardSkeleton key={index} />
-            ))
-          : homeResponse.map((movie, index) => {
-              return <Card key={index} Data={movie} />;
-            })}
+        {homeResponse && (
+          <h1 className="text-5xl font-semibold tracking-tighter mb-10">
+            Movies
+          </h1>
+        )}
+        <div className=" flex justify-center items-center flex-wrap gap-5">
+          {homeLoading
+            ? Array.from({ length: 20 }, (_, index) => (
+                <CardSkeleton key={index} />
+              ))
+            : homeResponse.movies?.map((movie) => {
+                return <Card key={movie.id} Data={movie} />;
+              })}
+        </div>
+        {homeResponse && (
+          <h1 className="text-5xl font-semibold tracking-tighter my-10">
+            TV Shows
+          </h1>
+        )}
+        <div className="flex justify-center items-center flex-wrap gap-5">
+          {homeLoading
+            ? Array.from({ length: 20 }, (_, index) => (
+                <CardSkeleton key={index} />
+              ))
+            : homeResponse.tvShows?.map((movie) => {
+                return <Card key={movie.id} Data={movie} />;
+              })}
+        </div>
       </div>
     </>
   );

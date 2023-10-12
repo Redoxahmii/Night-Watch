@@ -28,6 +28,8 @@ const UserSchema = new mongoose.Schema({
   },
   watchList: {
     type: Array,
+    index: true,
+    unique: true,
     default: [],
   },
 });
