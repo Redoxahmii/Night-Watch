@@ -107,9 +107,11 @@ const ShowsDetail = () => {
           </p>
           <div className="flex items-center text-white/70 text-sm mt-1 mb-1 gap-1">
             <Dna size={20} className="text-red-400" />
-            Genre :
+            Genre:
             {genres.map((genre, index) => (
-              <p key={index}>{genre}</p>
+              <p key={index} className="text-red-400">
+                {genre}
+              </p>
             ))}
           </div>
           {episode_run_time && <p>Episode Runtime : {episode_run_time}</p>}
