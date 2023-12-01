@@ -2,9 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../components/Loader";
 import ShowError from "./ShowError";
-import { Button } from "@nextui-org/react";
-import axios from "axios";
+import { Button, Image } from "@nextui-org/react";
+// import axios from "axios";
 import { PageContext } from "../../utils/PageContext";
+import { Clapperboard, Dna, Popcorn } from "lucide-react";
 
 const ShowsDetail = () => {
   const { showId, season, episode } = useParams();
@@ -27,7 +28,7 @@ const ShowsDetail = () => {
         const res = await fetch(
           `${
             import.meta.env.VITE_SERVER_URL
-          }/api/tvshow/${showId}/${selectedSeason}/${selectedEpisode}`
+          }/api/tvshow/${showId}/${selectedSeason}/${selectedEpisode}`,
         );
         const data = await res.json();
         if (res.status !== 200) {
@@ -43,24 +44,24 @@ const ShowsDetail = () => {
         setLoading(false);
       }
     };
-    const StoreMovieList = async () => {
-      try {
-        if (userData.status) {
-          await axios.post(
-            `${import.meta.env.VITE_SERVER_URL}/api/user/watchList`,
-            {
-              movieId: showId,
-              userId: userData.id,
-            }
-          );
-        } else {
-          return;
-        }
-      } catch (error) {
-        return;
-      }
-    };
-    StoreMovieList();
+    // const StoreMovieList = async () => {
+    //   try {
+    //     if (userData.status) {
+    //       await axios.post(
+    //         `${import.meta.env.VITE_SERVER_URL}/api/user/watchList`,
+    //         {
+    //           movieId: showId,
+    //           userId: userData.id,
+    //         }
+    //       );
+    //     } else {
+    //       return;
+    //     }
+    //   } catch (error) {
+    //     return;
+    //   }
+    // };
+    // StoreMovieList();
     fetchShows();
   }, [selectedEpisode, selectedSeason, showId, selectedSeasonIndex, userData]);
 
@@ -90,27 +91,44 @@ const ShowsDetail = () => {
 
   return (
     <>
-      <div className="flex w-screen h-screen">
-        <div className="w-[40vw] flex flex-col pl-5 gap-2 mt-20 mr-20">
-          <img
-            className="object-contain w-40 h-40"
+      <div className="flex flex-col lg:flex-row h-screen lg:mx-10 justify-between items-center">
+        <div className="flex flex-col lg:mt-8 lg:mx-4 mt-10 w-full lg:max-w-lg max-w-md">
+          <Image
+            width={130}
+            height={130}
+            className="hidden lg:block"
             src={posterPath}
             alt={title}
           />
-          <h1 className="text-4xl">{title}</h1>
-          <p className="text-slate-500">{tagline}</p>
-          <p>{overview}</p>
-          <div className="flex gap-2">
+          <h1 className="text-3xl tracking-tighter pt-2">{title}</h1>
+          <p className="text-white/80 text-sm pt-2 ">{tagline}</p>
+          <p className="text-sm pt-3  lg:max-h-36 overflow-hidden text-ellipsis">
+            {overview}
+          </p>
+          <div className="flex items-center text-white/70 text-sm mt-1 mb-1 gap-1">
+            <Dna size={20} className="text-red-400" />
             Genre :
             {genres.map((genre, index) => (
               <p key={index}>{genre}</p>
             ))}
           </div>
           {episode_run_time && <p>Episode Runtime : {episode_run_time}</p>}
-          <p>Number of Seasons: {number_of_seasons}</p>
-          <p>Number of Episodes: {number_of_episodes}</p>
+          <div className="flex text-white/70 items-center gap-2">
+            <Clapperboard size={20} className="text-purple-400" />
+            <p className="text-sm">
+              Number of Seasons:{" "}
+              <span className="text-purple-400">{number_of_seasons}</span>
+            </p>
+          </div>
+          <div className="flex items-center text-white/70 gap-2 mt-1">
+            <Popcorn size={20} className="text-yellow-400" />
+            <p className="text-sm">
+              Number of Episodes:{" "}
+              <span className="text-yellow-400">{number_of_episodes}</span>
+            </p>
+          </div>
         </div>
-        <div className="w-[70vw] flex">
+        <div className="lg:flex w-full max-w-3xl aspect-video">
           {loading && (
             <div className="w-full aspect-video flex items-center justify-center">
               <Loader />
@@ -120,7 +138,7 @@ const ShowsDetail = () => {
             <iframe
               src={embedUrl}
               allowFullScreen
-              className="w-full aspect-video"
+              className="block w-full rounded-3xl"
             ></iframe>
           )}
         </div>
@@ -155,18 +173,18 @@ const ShowsDetail = () => {
                   isDisabled={buttonReload}
                   onPress={() => {
                     setSelectedSeason(
-                      seasons[selectedSeasonIndex].seasonNumber
+                      seasons[selectedSeasonIndex].seasonNumber,
                     );
                     setSelectedEpisode(episode);
                     navigate(
-                      `/tvshows/${showId}/${seasons[selectedSeasonIndex].seasonNumber}/${episode}`
+                      `/tvshows/${showId}/${seasons[selectedSeasonIndex].seasonNumber}/${episode}`,
                     );
                   }}
                 >
                   Episode {episodeIndex + 1}
                 </Button>
               </div>
-            )
+            ),
           )}
         </div>
       </div>

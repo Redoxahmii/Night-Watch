@@ -5,7 +5,7 @@ import MovieError from "./MovieError";
 import { Image } from "@nextui-org/react";
 import { Rocket, Star } from "lucide-react";
 import { PageContext } from "../../utils/PageContext";
-import axios from "axios";
+// import axios from "axios";
 
 const MovieDetails = () => {
   const { movieId } = useParams();
@@ -18,7 +18,7 @@ const MovieDetails = () => {
     async function fetchMovieDetails() {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/api/movie/${movieId}`
+          `${import.meta.env.VITE_SERVER_URL}/api/movie/${movieId}`,
         );
         const data = await res.json();
         if (res.status !== 200) {
@@ -33,25 +33,25 @@ const MovieDetails = () => {
       }
     }
 
-    const StoreMovieList = async () => {
-      try {
-        if (userData.status) {
-          await axios.post(
-            `${import.meta.env.VITE_SERVER_URL}/api/user/watchList`,
-            {
-              movieId: movieId,
-              userId: userData.id,
-            }
-          );
-        } else {
-          return;
-        }
-      } catch (error) {
-        return;
-      }
-    };
-
-    StoreMovieList();
+    // const StoreMovieList = async () => {
+    //   try {
+    //     if (userData.status) {
+    //       await axios.post(
+    //         `${import.meta.env.VITE_SERVER_URL}/api/user/watchList`,
+    //         {
+    //           movieId: movieId,
+    //           userId: userData.id,
+    //         }
+    //       );
+    //     } else {
+    //       return;
+    //     }
+    //   } catch (error) {
+    //     return;
+    //   }
+    // };
+    //
+    // StoreMovieList();
     fetchMovieDetails();
   }, [movieId, userData]);
 
@@ -79,7 +79,7 @@ const MovieDetails = () => {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen lg:mx-10 justify-between items-center">
-      <div className="flex flex-col lg:mt-8 mt-10 w-full lg:max-w-lg max-w-md">
+      <div className="flex flex-col lg:mx-4 lg:mt-8 mt-10 w-full lg:max-w-lg max-w-md">
         <Image
           width={130}
           height={130}
@@ -87,12 +87,12 @@ const MovieDetails = () => {
           src={posterPath}
           alt={title}
         />
-        <h1 className="text-3xl tracking-tighter pt-2 lg:mx-4">{title}</h1>
-        <p className="text-white/80 text-sm pt-2 lg:mx-4">{tagline}</p>
-        <p className="text-sm pt-3 lg:mx-4 lg:max-h-36 overflow-hidden text-ellipsis">
+        <h1 className="text-3xl tracking-tighter pt-2">{title}</h1>
+        <p className="text-white/80 text-sm pt-2">{tagline}</p>
+        <p className="text-sm pt-3 lg:max-h-36 overflow-hidden text-ellipsis">
           {overview}
         </p>
-        <div className="flex items-center gap-2 pt-2 lg:mx-4">
+        <div className="flex items-center gap-2 pt-2">
           <Star
             size={20}
             fill="currentColor"
@@ -100,7 +100,7 @@ const MovieDetails = () => {
           ></Star>
           <p className="text-white/70 text-sm">{vote_average}</p>
         </div>
-        <div className="flex items-center gap-2 pt-1 lg:mb-0 mb-5 lg:mx-4">
+        <div className="flex items-center gap-2 pt-1 lg:mb-0 mb-5">
           <Rocket size={20} className="text-red-400"></Rocket>
           <p className="text-white/70 text-sm">{release_date}</p>
         </div>
