@@ -17,7 +17,9 @@ Next features to be added are:
 - [x] User Registration and Login
 - [x] Home Page
 
-<!-- ## Preview -->
+## Preview
+
+![Home Page](client/public/preview.png)
 
 ## Link
 
