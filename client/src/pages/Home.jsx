@@ -22,7 +22,7 @@ const Home = () => {
         const response = await fetch(
           `${
             import.meta.env.VITE_SERVER_URL
-          }/api/movie/search/shows?query=spiderman`
+          }/api/movie/search/shows?query=batman`,
         ).then((response) => response.json());
         if (response.error) {
           console.log(response.error);
@@ -43,7 +43,7 @@ const Home = () => {
     try {
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/api/movie/search/shows?query=` +
-          searchTerm
+          searchTerm,
       ).then((response) => response.json());
       if (response.error) {
         setInputDisabled(true); // Disable the input field.
@@ -65,8 +65,8 @@ const Home = () => {
 
   return (
     <>
-      <div className="w-screen h-[91vh] flex items-center justify-center ">
-        <div className=" flex  flex-col items-center justify-center gap-4">
+      <div className="w-screen h-[91vh] flex items-center justify-center">
+        <div className=" flex  flex-col items-center justify-center gap-4 animate-fade animate-delay-700 animate-duration-500">
           <h1 className="lg:text-7xl text-4xl tracking-tighter text-secondary-700">
             Welcome to Night Watch
           </h1>

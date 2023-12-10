@@ -1,0 +1,12 @@
+{
+  "name": "night-watch",
+  "version": "1.0.0",
+  "description": "This is a MERN stack application created for watching movies. This application uses [TMDB API](https://www.themoviedb.org/) for fetching movies and user authentication is implemented using MongoDB.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

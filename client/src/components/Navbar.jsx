@@ -17,7 +17,6 @@ import {
   Accordion,
   AccordionItem,
 } from "@nextui-org/react";
-import me from "../assets/me.jpg";
 import { PageContext } from "../utils/PageContext";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { LogIn, LogOut, User, UserPlus } from "lucide-react";
@@ -117,9 +116,8 @@ const Nav = () => {
                 as="button"
                 className="transition-transform"
                 color="secondary"
-                name="User"
+                showFallback
                 size="sm"
-                src={me}
               ></Avatar>
             </DropdownTrigger>
             <DropdownMenu

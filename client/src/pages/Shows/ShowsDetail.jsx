@@ -2,10 +2,16 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../components/Loader";
 import ShowError from "./ShowError";
-import { Button, Image } from "@nextui-org/react";
+import { Button, ButtonGroup, Image } from "@nextui-org/react";
 // import axios from "axios";
 import { PageContext } from "../../utils/PageContext";
 import { Clapperboard, Dna, Popcorn } from "lucide-react";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownItem,
+  DropdownMenu,
+} from "@nextui-org/react";
 
 const ShowsDetail = () => {
   const { showId, season, episode } = useParams();
@@ -19,7 +25,6 @@ const ShowsDetail = () => {
   const navigate = useNavigate();
   const [selectedSeasonIndex, setSelectedSeasonIndex] = useState(0);
   const { userData } = useContext(PageContext);
-
   useEffect(() => {
     const fetchShows = async () => {
       setLoading(true);
@@ -82,7 +87,6 @@ const ShowsDetail = () => {
     overview,
     posterPath,
     number_of_episodes,
-    episode_run_time,
     number_of_seasons,
     tagline,
     embedUrl,
@@ -90,9 +94,9 @@ const ShowsDetail = () => {
   } = showDetails;
 
   return (
-    <>
-      <div className="flex flex-col lg:flex-row h-screen lg:mx-10 justify-between items-center">
-        <div className="flex flex-col lg:mt-8 lg:mx-4 mt-10 w-full lg:max-w-lg max-w-md">
+    <div className="flex flex-col mx-20 h-screen">
+      <div className="flex flex-col lg:flex-row justify-between items-center mt-32 mb-7">
+        <div className="flex flex-col lg:mt-8 mt-10 w-full lg:max-w-lg max-w-md">
           <Image
             width={130}
             height={130}
@@ -114,7 +118,6 @@ const ShowsDetail = () => {
               </p>
             ))}
           </div>
-          {episode_run_time && <p>Episode Runtime : {episode_run_time}</p>}
           <div className="flex text-white/70 items-center gap-2">
             <Clapperboard size={20} className="text-purple-400" />
             <p className="text-sm">
@@ -145,52 +148,50 @@ const ShowsDetail = () => {
           )}
         </div>
       </div>
-      <div className="flex flex-wrap">
-        <div className="dropdown dropdown-top">
-          <button
-            tabIndex={0}
-            disabled={buttonReload}
-            className="btn btn-neutral m-1 normal-case"
-          >
-            {seasons[selectedSeasonIndex].seasonName}
-          </button>
-          <ul className="dropdown-content z-[1] flex gap-2  shadow bg-base-300 menu menu-horizontal w-[500px] ">
+      <div className="flex items-center justify-center mb-5">
+        <Dropdown backdrop="blur" placement="top">
+          <DropdownTrigger>
+            <Button
+              radius="sm"
+              size="lg"
+              color="danger"
+              variant="flat"
+              disabled={buttonReload}
+            >
+              {seasons[selectedSeasonIndex].seasonName}
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu color="danger" variant="flat">
             {seasons.map((season, seasonIndex) => (
-              <li key={seasonIndex}>
-                <Button
-                  isDisabled={buttonReload}
-                  onClick={() => setSelectedSeasonIndex(seasonIndex)}
-                >
-                  {season.seasonName}
-                </Button>
-              </li>
+              <DropdownItem
+                key={seasonIndex}
+                onPress={() => setSelectedSeasonIndex(seasonIndex)}
+              >
+                {season.seasonName}
+              </DropdownItem>
             ))}
-          </ul>
-        </div>
-        <div className="flex flex-wrap">
-          {seasons[selectedSeasonIndex].episodeCount.map(
-            (episode, episodeIndex) => (
-              <div key={episodeIndex} className="p-2">
-                <Button
-                  isDisabled={buttonReload}
-                  onPress={() => {
-                    setSelectedSeason(
-                      seasons[selectedSeasonIndex].seasonNumber,
-                    );
-                    setSelectedEpisode(episode);
-                    navigate(
-                      `/tvshows/${showId}/${seasons[selectedSeasonIndex].seasonNumber}/${episode}`,
-                    );
-                  }}
-                >
-                  Episode {episodeIndex + 1}
-                </Button>
-              </div>
-            ),
-          )}
-        </div>
+          </DropdownMenu>
+        </Dropdown>
       </div>
-    </>
+      <ButtonGroup color="primary" variant="flat" className="flex flex-wrap">
+        {seasons[selectedSeasonIndex].episodeCount.map(
+          (episode, episodeIndex) => (
+            <Button
+              key={episodeIndex}
+              onPress={() => {
+                setSelectedSeason(seasons[selectedSeasonIndex].seasonNumber);
+                setSelectedEpisode(episode);
+                navigate(
+                  `/tvshows/${showId}/${seasons[selectedSeasonIndex].seasonNumber}/${episode}`,
+                );
+              }}
+            >
+              Episode {episodeIndex + 1}
+            </Button>
+          ),
+        )}
+      </ButtonGroup>
+    </div>
   );
 };
 
