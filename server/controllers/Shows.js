@@ -14,12 +14,12 @@ export const getAllShows = async (req, res) => {
     const tvShows = tmdbResponse.data.results;
     const fetchTrailerUrl = async (tvshowId) => {
       const trailerResponse = await axios.get(
-        `https://api.themoviedb.org/3/tv/${tvshowId}/videos?api_key=${tmdbApiKey}`
+        `https://api.themoviedb.org/3/tv/${tvshowId}/videos?api_key=${tmdbApiKey}`,
       );
 
       // Filter for trailers based on the "type" field
       const trailers = trailerResponse.data.results.filter(
-        (video) => video.type === "Trailer"
+        (video) => video.type === "Trailer",
       );
 
       // Check if there are trailers available for the movie
@@ -39,7 +39,7 @@ export const getAllShows = async (req, res) => {
         const { name, overview, vote_average } = tvShow;
         const title = name;
         const posterPath = `https://image.tmdb.org/t/p/w500${tvShow.poster_path}`;
-        const embedUrl = `https://vidsrc.to/embed/tv/${tvShow.id}`;
+        const embedUrl = `https://vidsrc2.to/embed/tv/${tvShow.id}`;
         return {
           title,
           overview,
@@ -49,7 +49,7 @@ export const getAllShows = async (req, res) => {
           posterPath,
           embedUrl,
         };
-      })
+      }),
     );
 
     res.json(tvShowsWithEmbedUrls);
@@ -74,7 +74,7 @@ export const getOneShow = async (req, res) => {
       seasonName: season.name,
       episodeCount: Array.from(
         { length: season.episode_count },
-        (_, i) => i + 1
+        (_, i) => i + 1,
       ),
     }));
 
@@ -88,7 +88,7 @@ export const getOneShow = async (req, res) => {
       tagline,
     } = data;
     const posterPath = `https://image.tmdb.org/t/p/w500/${poster_path}`;
-    const embedUrl = `https://vidsrc.to/embed/tv/${showId}/${season}/${episode}`;
+    const embedUrl = `https://vidsrc2.to/embed/tv/${showId}/${season}/${episode}`;
     const genres = data.genres.map((genre) => genre.name);
     const title = name;
     const ShowData = {

@@ -2,7 +2,6 @@ import axios from "axios";
 
 export const getAllMovies = async (req, res) => {
   try {
-    // Make a request to TMDB API to get a list of popular movies
     const { page, category } = req.query;
     const tmdbApiKey = process.env.TMDB_API_KEY;
     if (!["popular", "top_rated", "upcoming"].includes(category)) {
@@ -11,19 +10,17 @@ export const getAllMovies = async (req, res) => {
     const tmdbUrl = `https://api.themoviedb.org/3/movie/${category}?api_key=${tmdbApiKey}&page=${page}`;
     const tmdbResponse = await axios.get(tmdbUrl);
 
-    // Extract relevant movie data from TMDB API response
     const movies = tmdbResponse.data.results;
     const baseUrl = "https://image.tmdb.org/t/p/w500";
 
-    // Function to fetch trailer URLs for a movie
     const fetchTrailerUrl = async (movieId) => {
       const trailerResponse = await axios.get(
-        `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${tmdbApiKey}`
+        `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${tmdbApiKey}`,
       );
 
       // Filter for trailers based on the "type" field
       const trailers = trailerResponse.data.results.filter(
-        (video) => video.type === "Trailer"
+        (video) => video.type === "Trailer",
       );
 
       // Check if there are trailers available for the movie
@@ -51,7 +48,7 @@ export const getAllMovies = async (req, res) => {
           posterPath: imageExists ? posterPath : "",
           trailerUrl, // Add the trailer URL to the movie data
         };
-      })
+      }),
     );
 
     res.json(moviesWithEmbedAndTrailerUrls);
@@ -80,7 +77,7 @@ export const getOneMovie = async (req, res) => {
     const baseUrl = "https://image.tmdb.org/t/p/w500";
     const posterPath = `${baseUrl}${poster_path}`;
 
-    const embedUrl = `https://vidsrc.to/embed/movie/${movieId}`;
+    const embedUrl = `https://vidsrc2.to/embed/movie/${movieId}`;
 
     // Check if the poster image exists
     const imageExists = await checkImageExists(posterPath);
@@ -123,12 +120,12 @@ export const searchMovies = async (req, res) => {
     // Function to fetch trailer URL for a movie
     const fetchTrailerUrl = async (movieId) => {
       const trailerResponse = await axios.get(
-        `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${tmdbApiKey}`
+        `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${tmdbApiKey}`,
       );
 
       // Filter for trailers based on the "type" field
       const trailers = trailerResponse.data.results.filter(
-        (video) => video.type === "Trailer"
+        (video) => video.type === "Trailer",
       );
 
       // Check if there are trailers available for the movie
@@ -144,7 +141,7 @@ export const searchMovies = async (req, res) => {
       movies.map(async (movie) => {
         const navigateLink = `/movies/${movie.id}`;
         const posterPath = `${baseUrl}${movie.poster_path}`;
-        const embedUrl = `https://vidsrc.to/embed/movie/${movie.id}`;
+        const embedUrl = `https://vidsrc2.to/embed/movie/${movie.id}`;
 
         // Check if the poster image exists
         try {
@@ -180,7 +177,7 @@ export const searchMovies = async (req, res) => {
             trailerUrl: "",
           };
         }
-      })
+      }),
     );
     res.json(moviesWithEmbedUrls);
   } catch (error) {
@@ -208,12 +205,12 @@ export const searchMovieAndShows = async (req, res) => {
     // Function to fetch trailer URL for a movie
     const fetchTrailerUrl = async (movieId) => {
       const trailerResponse = await axios.get(
-        `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${tmdbApiKey}`
+        `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${tmdbApiKey}`,
       );
 
       // Filter for trailers based on the "type" field
       const trailers = trailerResponse.data.results.filter(
-        (video) => video.type === "Trailer"
+        (video) => video.type === "Trailer",
       );
 
       // Check if there are trailers available for the movie
@@ -226,12 +223,12 @@ export const searchMovieAndShows = async (req, res) => {
     };
     const fetchTrailerUrlTV = async (showId) => {
       const trailerResponse = await axios.get(
-        `https://api.themoviedb.org/3/tv/${showId}/videos?api_key=${tmdbApiKey}`
+        `https://api.themoviedb.org/3/tv/${showId}/videos?api_key=${tmdbApiKey}`,
       );
 
       // Filter for trailers based on the "type" field
       const trailers = trailerResponse.data.results.filter(
-        (video) => video.type === "Trailer"
+        (video) => video.type === "Trailer",
       );
 
       // Check if there are trailers available for the movie
@@ -247,7 +244,7 @@ export const searchMovieAndShows = async (req, res) => {
       movies.map(async (movie) => {
         const navigateLink = `/movies/${movie.id}`;
         const posterPath = `${baseUrl}${movie.poster_path}`;
-        const embedUrl = `https://vidsrc.to/embed/movie/${movie.id}`;
+        const embedUrl = `https://vidsrc2.to/embed/movie/${movie.id}`;
 
         // Check if the poster image exists
         try {
@@ -283,14 +280,14 @@ export const searchMovieAndShows = async (req, res) => {
             trailerUrl: "",
           };
         }
-      })
+      }),
     );
     const tvShowsWithEmbedUrls = await Promise.all(
       tvShows.map(async (movie) => {
         const navigateLink = `/tvshows/${movie.id}/1/1`;
         const posterPath = `${baseUrl}${movie.poster_path}`;
-        const embedUrl = `https://vidsrc.to/embed/tv/${movie.id}`;
-        const { name, overview, vote_average } = movie;
+        const embedUrl = `https://vidsrc2.to/embed/tv/${movie.id}`;
+        const { name } = movie;
         const title = name;
         // Check if the poster image exists
         try {
@@ -329,7 +326,7 @@ export const searchMovieAndShows = async (req, res) => {
             trailerUrl: "",
           };
         }
-      })
+      }),
     );
 
     res.json({
