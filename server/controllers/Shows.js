@@ -39,7 +39,7 @@ export const getAllShows = async (req, res) => {
         const { name, overview, vote_average } = tvShow;
         const title = name;
         const posterPath = `https://image.tmdb.org/t/p/w500${tvShow.poster_path}`;
-        const embedUrl = `https://vidsrc2.to/embed/tv/${tvShow.id}`;
+        const embedUrl = `https://vidsrc.to/embed/tv/${tvShow.id}`;
         return {
           title,
           overview,
@@ -88,7 +88,7 @@ export const getOneShow = async (req, res) => {
       tagline,
     } = data;
     const posterPath = `https://image.tmdb.org/t/p/w500/${poster_path}`;
-    const embedUrl = `https://vidsrc2.to/embed/tv/${showId}/${season}/${episode}`;
+    const embedUrl = `https://vidsrc.to/embed/tv/${showId}/${season}/${episode}`;
     const genres = data.genres.map((genre) => genre.name);
     const title = name;
     const ShowData = {

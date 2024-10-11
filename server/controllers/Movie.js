@@ -77,7 +77,7 @@ export const getOneMovie = async (req, res) => {
     const baseUrl = "https://image.tmdb.org/t/p/w500";
     const posterPath = `${baseUrl}${poster_path}`;
 
-    const embedUrl = `https://vidsrc2.to/embed/movie/${movieId}`;
+    const embedUrl = `https://vidsrc.to/embed/movie/${movieId}`;
 
     // Check if the poster image exists
     const imageExists = await checkImageExists(posterPath);
@@ -141,7 +141,7 @@ export const searchMovies = async (req, res) => {
       movies.map(async (movie) => {
         const navigateLink = `/movies/${movie.id}`;
         const posterPath = `${baseUrl}${movie.poster_path}`;
-        const embedUrl = `https://vidsrc2.to/embed/movie/${movie.id}`;
+        const embedUrl = `https://vidsrc.to/embed/movie/${movie.id}`;
 
         // Check if the poster image exists
         try {
@@ -244,7 +244,7 @@ export const searchMovieAndShows = async (req, res) => {
       movies.map(async (movie) => {
         const navigateLink = `/movies/${movie.id}`;
         const posterPath = `${baseUrl}${movie.poster_path}`;
-        const embedUrl = `https://vidsrc2.to/embed/movie/${movie.id}`;
+        const embedUrl = `https://vidsrc.to/embed/movie/${movie.id}`;
 
         // Check if the poster image exists
         try {
@@ -286,7 +286,7 @@ export const searchMovieAndShows = async (req, res) => {
       tvShows.map(async (movie) => {
         const navigateLink = `/tvshows/${movie.id}/1/1`;
         const posterPath = `${baseUrl}${movie.poster_path}`;
-        const embedUrl = `https://vidsrc2.to/embed/tv/${movie.id}`;
+        const embedUrl = `https://vidsrc.to/embed/tv/${movie.id}`;
         const { name } = movie;
         const title = name;
         // Check if the poster image exists
